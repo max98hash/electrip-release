@@ -8,13 +8,7 @@
           </v-col>
 
           <v-col>
-            <v-sheet
-              min-height="70vh"
-              rounded="lg"
-              elevation="12"
-            >
-              <!--  -->
-            </v-sheet>
+            <BaseMapPure/>
           </v-col>
         </v-row>
       </v-container>
@@ -24,11 +18,13 @@
 
 <script>
 import Menu from './components/Menu.vue';
+import BaseMapPure from './components/BaseMapPure.vue';
 
 export default {
   name: 'Home',
   components: {
-    Menu
+    Menu,
+    BaseMapPure
   } 
 }
 </script>
