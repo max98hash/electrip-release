@@ -7,10 +7,11 @@
             <Menu/>
           </v-col>
 
-          <v-col cols="10" sm="9" md="9">
+          <v-col cols="10" sm="10" md="9">
             <BaseMapPure/>
           </v-col>
         </v-row>
+        <Calendar/>
         <v-row>
         </v-row>
       </v-container>
@@ -21,12 +22,14 @@
 <script>
 import Menu from './components/Menu.vue';
 import BaseMapPure from './components/BaseMapPure.vue';
+import Calendar from './components/Calendar.vue';
 
 export default {
   name: 'Home',
   components: {
     Menu,
-    BaseMapPure
+    BaseMapPure,
+    Calendar,
   } 
 }
 </script>
