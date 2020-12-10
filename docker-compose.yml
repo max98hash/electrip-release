@@ -8,9 +8,20 @@ services:
     ports:
       - 8080:8080
 
-  server:
+  cars:
     build:
-      context: ./server
+      context: ./cars
     restart: unless-stopped
     ports:
       - 3000:3000
+    volumes:
+      - ./cars:/usr/src/app/cars
+
+  visits:
+    build:
+      context: ./visits
+    restart: unless-stopped
+    ports:
+      - 3333:3333
+    volumes:
+      - ./visits:/usr/src/app/visits
