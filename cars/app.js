@@ -5,7 +5,17 @@ const mongoose = require('mongoose');
 const app = express();
 const stuff = require('./routes/stuff');
 
-mongoose.connect('mongodb+srv://admin:er0A8rezTbXd5XWM@cluster0-ejizk.mongodb.net/electrip?retryWrites=true&w=majority',
+/*mongoose.connect('mongodb+srv://admin:er0A8rezTbXd5XWM@cluster0-ejizk.mongodb.net/cars?retryWrites=true&w=majority',
+    { useNewUrlParser: true,
+    useUnifiedTopology: true })
+.then(() => console.log('Connexion à MongoDB réussie !'))
+.catch(() => console.log('Connexion à MongoDB échouée !'));*/
+
+const DBNAME = "cars";
+const HOST = "mongodb:27017";
+const HOST_LOCAL = "localhost";
+
+mongoose.connect(`mongodb://${HOST}/${DBNAME}`,
     { useNewUrlParser: true,
     useUnifiedTopology: true })
 .then(() => console.log('Connexion à MongoDB réussie !'))

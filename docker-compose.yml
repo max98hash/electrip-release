@@ -1,12 +1,20 @@
 version: "3.1"
 
 services:
+  mongodb:
+    container_name: mongodb
+    image: mongo
+    ports:
+      - "27017:27017"
+
   client:
     build:
       context: ./client
     restart: unless-stopped
     ports:
       - 8080:8080
+    volumes:
+      - ./client:/usr/src/app/client
 
   cars:
     build:
@@ -16,6 +24,8 @@ services:
       - 3000:3000
     volumes:
       - ./cars:/usr/src/app/cars
+    depends_on:
+      - mongodb
 
   visits:
     build:
@@ -25,3 +35,5 @@ services:
       - 3333:3333
     volumes:
       - ./visits:/usr/src/app/visits
+    depends_on:
+      - mongodb
