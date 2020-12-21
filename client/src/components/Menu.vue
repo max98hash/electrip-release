@@ -14,6 +14,7 @@
             <v-list-item
                 v-for="item in items"
                 :key="item.title"
+                :to="item.path"
                 link
             >
                 <v-list-item-icon>
@@ -34,10 +35,10 @@
   export default {
     data: () => ({
       items: [
-          { title: 'Home', icon: 'mdi-home' },
-          { title: 'Cars', icon: 'mdi-car' },
-          { title: 'Explore', icon: 'mdi-compass' },
-          { title: 'Share', icon: 'mdi-account-group' },
+          { title: 'Home', icon: 'mdi-home', path: '/' },
+          { title: 'Cars', icon: 'mdi-car', path: '/cars'  },
+          { title: 'Explore', icon: 'mdi-compass', path: '/explore'  },
+          { title: 'Share', icon: 'mdi-account-group', path: '/share'  },
         ],
     }),
   }
