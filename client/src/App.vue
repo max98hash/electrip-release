@@ -1,35 +1,29 @@
 <template>
-  <v-app id="inspire">
-    <v-main>
-      <v-container>
-        <v-row justify="center">
-          <v-col cols="2" sm="12" md="3">
-            <Menu/>
-          </v-col>
-
-          <v-col cols="10" sm="10" md="9">
-            <BaseMapPure/>
-          </v-col>
-        </v-row>
-        <Calendar/>
-        <v-row>
-        </v-row>
-      </v-container>
-    </v-main>
-  </v-app>
+  <div id="app">
+    
+    <router-view/>
+  </div>
 </template>
 
-<script>
-import Menu from './components/Menu.vue';
-import BaseMapPure from './components/BaseMapPure.vue';
-import Calendar from './components/Calendar.vue';
-
-export default {
-  name: 'Home',
-  components: {
-    Menu,
-    BaseMapPure,
-    Calendar,
-  } 
+<style lang="scss">
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
 }
-</script>
+
+#nav {
+  padding: 30px;
+
+  a {
+    font-weight: bold;
+    color: #2c3e50;
+
+    &.router-link-exact-active {
+      color: #42b983;
+    }
+  }
+}
+</style>
