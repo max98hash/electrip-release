@@ -1,9 +1,8 @@
 const Car = require('../models/car');
-const mongoose = require('mongoose');
 
 exports.getCars = (req, res, next) => {
 	Car.find()
-    .then(things => res.status(200).json(things))
+    .then(cars => res.status(200).json(cars))
     .catch(error => res.status(400).json({ error }));
 }
 

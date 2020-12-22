@@ -7,7 +7,14 @@ services:
     ports:
       - "27017:27017"
 
+  mongo_auth:
+    container_name: mongo_auth
+    image: mongo
+    ports:
+      - "27044:27044"
+
   client:
+    container_name: client
     build:
       context: ./client
     restart: unless-stopped
@@ -17,6 +24,7 @@ services:
       - ./client:/usr/src/app/client
 
   cars:
+    container_name: cars
     build:
       context: ./cars
     restart: unless-stopped
@@ -27,13 +35,26 @@ services:
     depends_on:
       - mongodb
 
-  visits:
+  #visits:
+  #  build:
+  #    context: ./visits
+  #  restart: unless-stopped
+  #  ports:
+  #    - 3333:3333
+  #  volumes:
+  #    - ./visits:/usr/src/app/visits
+  #  depends_on:
+  #    - mongodb
+
+  auth:
+    container_name: auth
     build:
-      context: ./visits
+      context: ./auth
     restart: unless-stopped
     ports:
-      - 3333:3333
+      - 4444:4444
     volumes:
-      - ./visits:/usr/src/app/visits
+      - ./auth:/usr/src/app/auth
+      - /usr/src/app/auth/node_modules
     depends_on:
-      - mongodb
+      - mongo_auth
