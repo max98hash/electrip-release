@@ -106,7 +106,7 @@
 </template>
 
 <script>
-import {mapMutations} from 'vuex';
+import {mapMutations, mapActions} from 'vuex';
 
 export default {
   name: "CarsForm",
@@ -120,18 +120,19 @@ export default {
       valid: true,
   }),
   methods: {
-    ...mapMutations(['setCreateCar','addCar']),
-    submit(){
+    ...mapMutations(['setCreateCar']),
+    ...mapActions(['addCar']),
+    async submit(){
       if(this.$refs.form.validate()){
-        console.log("champs corrects")
-        let brand = this.brand;
-        let model = this.model;
-        let years = this.years;
-        let matriculationNbr = this.matriculationNbr;
-        let autonomy = this.autonomy;
-        this.addCar({brand,model,years,matriculationNbr,autonomy});
+        this.addCar({
+          brand: this.brand,
+          model: this.model,
+          years: this.years,
+          matriculationNbr: this.matriculationNbr,
+          autonomy: this.autonomy
+          });
         this.setCreateCar();
-      }else{console.log('champs incorrects')}
+      }
     },
   },
 }

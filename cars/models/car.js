@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const carSchema = mongoose.Schema({
   brand: { type: String, required: true },
   model: { type: String, required: true },
-  years: { type: String, required: false },
+  years: { type: Number, required: false },
   matriculationNbr: { type: String, required: true },
   autonomy: { type: Number, required: true },
 });

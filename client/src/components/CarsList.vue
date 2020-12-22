@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations} from 'vuex';
+import { mapGetters, mapMutations, mapActions } from 'vuex';
 import CarsForm from '../components/forms/CarsForm';
 
 export default {
@@ -50,6 +50,12 @@ export default {
         CarsForm,
     },
     computed: mapGetters(['getCreateCar','getCars']),
-    methods: mapMutations(['setCreateCar']),
+    methods: {
+      ...mapMutations(['setCreateCar']),
+      ...mapActions(['fetchCars']),
+    },
+    created(){
+      this.fetchCars();
+    },
 }
 </script>

@@ -3,7 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 
 const app = express();
-const stuff = require('./routes/stuff');
+const cars = require('./routes/cars');
 
 /*mongoose.connect('mongodb+srv://admin:er0A8rezTbXd5XWM@cluster0-ejizk.mongodb.net/cars?retryWrites=true&w=majority',
     { useNewUrlParser: true,
@@ -30,6 +30,6 @@ app.use((req, res, next) => {
 
 app.use(bodyParser.json());
 
-app.use('/', stuff);
+app.use('/cars', cars);
 
 module.exports = app;

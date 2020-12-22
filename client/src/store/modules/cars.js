@@ -1,3 +1,5 @@
+const axios = require('axios');
+
 const state = {
     createCar: true,
     cars: [
@@ -13,26 +15,24 @@ const getters = {
 };
 
 const actions = {
-
+    async fetchCars({commit}){
+        const response = await axios.get(
+            'http://localhost:3000/cars'
+        );
+        commit('setCars',response.data);
+    },
+    async addCar({commit},car){
+        const response = await axios.post(
+            'http://localhost:3000/cars/create',car
+        );
+        commit('newCar',response.data);
+    }
 };
 
 const mutations = {
-    setCreateCar: state => {
-        if(state.createCar){
-            state.createCar=false
-        }
-        else{
-            state.createCar=true
-        }
-    },
-    addCar: (state, {brand, model, years, matriculationNbr, autonomy}) => {
-        console.log("Brand: "+brand);
-        console.log("Model: "+model);
-        console.log("Years: "+years);
-        console.log("Autonomy: "+autonomy);
-        console.log("matriculationNbr: "+matriculationNbr);
-        state.cars.push({brand,model,years,matriculationNbr,autonomy})
-    }
+    setCreateCar: state => state.createCar=!state.createCar,
+    setCars: (state, cars) => state.cars = cars ,
+    newCar: (state, car) => state.cars.push(car),
 };
 
 export default {
