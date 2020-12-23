@@ -3,6 +3,8 @@ const router = express.Router();
 
 const cars = require('../controllers/cars');
 
+const auth = require('../middleware/auth');
+
 router.get('/:id', cars.getCar);
 router.use('/', cars.getCars);
 router.post('/create', cars.createCar);
