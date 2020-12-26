@@ -55,13 +55,13 @@ describe('Cars', () => {
                 .post('/cars/')
                 .send(carExample)
                 .end((err, res) => {
-                    res.should.have.status(200);
+                    res.should.have.status(201);
                     res.body.should.be.a('object');
-                    res.body.issue.ops[0].should.have.property('brand');
-                    res.body.issue.ops[0].should.have.property('model');
-                    res.body.issue.ops[0].should.have.property('years');
-                    res.body.issue.ops[0].should.have.property('matriculationNbr');
-                    res.body.issue.ops[0].should.have.property('autonomy');
+                    res.body.should.have.property('brand');
+                    res.body.should.have.property('model');
+                    res.body.should.have.property('years');
+                    res.body.should.have.property('matriculationNbr');
+                    res.body.should.have.property('autonomy');
                     done();
                 });
         });
@@ -95,7 +95,7 @@ describe('Cars', () => {
     /*
       * Test the /DELETE/:id route
       */
-    describe('/DELETE/:id Issue', () => {
+    describe('/DELETE/:id Car', () => {
         it('it should DELETE a car given the id', (done) => {
             carExample.save((err, car) => {
                 chai.request(server)
