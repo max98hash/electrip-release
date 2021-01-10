@@ -13,6 +13,7 @@
         </v-row>
         <Calendar/>
         <v-row>
+          <LoginOverlay/>
         </v-row>
       </v-container>
     </v-main>
@@ -23,6 +24,7 @@
 import Menu from '../components/Menu.vue';
 import BaseMapPure from '../components/BaseMapPure.vue';
 import Calendar from '../components/Calendar.vue';
+import LoginOverlay from '../components/LoginOverlay.vue';
 
 export default {
   name: 'Home',
@@ -30,6 +32,7 @@ export default {
     Menu,
     BaseMapPure,
     Calendar,
-  } 
+    LoginOverlay,
+  },
 }
 </script>
