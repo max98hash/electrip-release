@@ -6,6 +6,7 @@ const carSchema = mongoose.Schema({
   years: { type: Number, required: false },
   matriculationNbr: { type: String, required: true },
   autonomy: { type: Number, required: true },
+  userId: {type: String, required: true},
 });
 
 module.exports = mongoose.model('Car', carSchema);

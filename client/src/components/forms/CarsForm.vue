@@ -106,11 +106,11 @@
 </template>
 
 <script>
-import {mapMutations, mapActions} from 'vuex';
+import {mapMutations, mapActions, mapGetters} from 'vuex';
 
 export default {
   name: "CarsForm",
-
+  computed: mapGetters(['getUserId']),
   data: () => ({ 
       brand: "",
       model: "",
@@ -124,12 +124,14 @@ export default {
     ...mapActions(['addCar']),
     async submit(){
       if(this.$refs.form.validate()){
+        console.log("userId : "+this.getUserId)
         this.addCar({
           brand: this.brand,
           model: this.model,
           years: this.years,
           matriculationNbr: this.matriculationNbr,
-          autonomy: this.autonomy
+          autonomy: this.autonomy,
+          userId: this.getUserId
           });
         this.setCreateCar();
       }

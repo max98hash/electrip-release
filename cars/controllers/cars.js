@@ -1,31 +1,32 @@
-const Visit = require('../models/visit');
+const Car = require('../models/car');
 
-exports.getVisit = (req, res, next) => {
-	Visit.findById(req.params.id)
+exports.getCar = (req, res, next) => {
+	Car.findById(req.params.id)
     .then(things => res.status(200).json(things))
     .catch(error => res.status(400).json({ error }));
 }
 
-exports.getVisits = (req, res, next) => {
-	Visit.find()
-    .then(visits => res.status(200).json(visits))
+exports.getCars = (req, res, next) => {
+    let userId = req.params.userId;
+	Car.find({userId: userId})
+    .then(cars => res.status(200).json(cars))
     .catch(error => res.status(400).json({ error }));
 }
 
-exports.createVisits = (req, res, next) => {
+exports.createCar = (req, res, next) => {
 	delete req.body._id;
-	const visit = new Visit({
+	const car = new Car({
 		...req.body
 	});
-	visit.save()
-		.then(() => res.status(201).json(visit))
+	car.save()
+		.then(() => res.status(201).json(car))
 		.catch(error => res.status(400).json({ error }));
 }
 
-exports.modifyVisit = (req, res, next) => {
-	Visit.findByIdAndUpdate(req.params.id,
-		{ name: req.body.name, address: req.body.address,  latitude: req.body.latitude, longitude: req.body.longitude, 
-            date: req.body.date}, {new: true}, 
+exports.modifyCar = (req, res, next) => {
+	Car.findByIdAndUpdate(req.params.id,
+		{ brand: req.body.brand, model: req.body.model,  years: req.body.years, matriculationNbr: req.body.matriculationNbr, 
+        autonomy: req.body.autonomy}, {new: true}, 
         function (err, result) {
             if (err) 
                 return res.status(400).json(err);
@@ -35,17 +36,11 @@ exports.modifyVisit = (req, res, next) => {
     );
 };
 
-exports.deleteVisit = (req, res, next) => {
-    Visit.findByIdAndDelete(req.params.id, (err, result) => {
+exports.deleteCar = (req, res, next) => {
+    Car.findByIdAndDelete(req.params.id, (err, result) => {
         if (err) 
                 return res.status(400).json(err);
             else
-                return res.status(201).json({ message: "visit successfully deleted!", result });
+                return res.status(201).json({ message: "car successfully deleted!", result });
     })
 }
-
-router.get('/:id', visits.getVisit);
-router.get('/', visits.getVisits);
-router.post('/create', visits.createVisit);
-router.put('/:id', visits.modifyVisit);
-router.delete('/:id', visits.deleteVisit);
