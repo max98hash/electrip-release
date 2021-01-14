@@ -5,6 +5,7 @@
 
 <script>
 import mapboxgl from "mapbox-gl";
+import MapboxDirections from '@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions'
 
 export default {
   name: "BaseMap",
@@ -34,6 +35,19 @@ export default {
         },
         trackUserLocation: true
         })
+    );
+
+    let directions = new MapboxDirections({
+        accessToken: mapboxgl.accessToken,
+        unit: 'metric',
+        profile: 'mapbox/driving'
+    });
+
+    directions.on('origin',() => console.log("Origin : "+directions.getOrigin()));
+    directions.on('destination',() => console.log("Destination : "+directions.getDestination()))
+
+    map.addControl(directions,
+    'top-left'
     );
     
     return map;
