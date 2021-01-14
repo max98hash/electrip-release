@@ -35,6 +35,18 @@ services:
     depends_on:
       - mongodb
 
+  trajects:
+    container_name: trajects
+    build:
+      context: ./trajects
+    restart: unless-stopped
+    ports:
+      - 5555:5555
+    volumes:
+      - ./trajects:/usr/src/app/trajects
+    depends_on:
+      - mongodb
+
   #visits:
   #  build:
   #    context: ./visits

@@ -6,6 +6,7 @@
 <script>
 import mapboxgl from "mapbox-gl";
 import MapboxDirections from '@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions'
+import { mapGetters, mapMutations, mapActions } from 'vuex';
 
 export default {
   name: "BaseMap",
@@ -13,6 +14,11 @@ export default {
     return {
       accessToken: 'pk.eyJ1IjoibWF4aGFzaCIsImEiOiJja2h5dXRoajAwOGpnMnlvaDh1bTEwMDY4In0.k8O0vTEqjd0t6WHOHiS_8A',
     };
+  },
+  computed: mapGetters(['getOrigin','getDestination','getUserId']),
+  methods: {
+    ...mapMutations(['setOrigin','setDestination']),
+    ...mapActions(['fetchTrajects','addtraject']),
   },
   mounted() {
     mapboxgl.accessToken = this.accessToken;
@@ -43,8 +49,11 @@ export default {
         profile: 'mapbox/driving'
     });
 
-    directions.on('origin',() => console.log("Origin : "+directions.getOrigin()));
-    directions.on('destination',() => console.log("Destination : "+directions.getDestination()))
+    directions.on('route',() => {
+      this.setDestination(directions.getDestination().geometry.coordinates.toString());
+      this.setOrigin(directions.getOrigin().geometry.coordinates.toString());
+      this.addtraject(this.getUserId);
+    })
 
     map.addControl(directions,
     'top-left'
