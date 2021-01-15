@@ -72,7 +72,7 @@ export default {
 <style scoped>
 .basemap {
   width: 100%;
-  height: 400px;
+  height: 450px;
   border-radius: 10px;
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
 }

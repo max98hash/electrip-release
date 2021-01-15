@@ -36,7 +36,7 @@
                 <v-btn
                 depressed
                 color="primary"
-                :id="car._id"
+                :id="car._id+','+car.brand+','+car.model"
                 @click="getCarSelected($event)"
                 >
                     Select
@@ -56,18 +56,22 @@ export default {
   data: () => ({
     
   }),
-  computed: mapGetters(['getCarOverlay','getUserId','getCars']),
+  computed: mapGetters(['getCarOverlay','getUserId','getCars','getCarName']),
   methods: {
     ...mapActions(['addtraject']),
-    ...mapMutations(['invertCarOverlay','setCar']),
+    ...mapMutations(['invertCarOverlay','setCar','setCarName']),
     getDate(){
         this.setDate(this.date);
         console.log(this.date)
         this.addtraject(this.getUserId);
     },
     getCarSelected(event){
-        let carId = event.currentTarget.id;
+        let carParams = event.currentTarget.id;
+        carParams.split(',');
+        let carId = carParams[0];
         this.setCar(carId);
+        console.log("voiture : "+carParams[1]+" "+carParams[2])
+        this.setCarName(carParams[1]+" "+carParams[2]);
         this.addtraject(this.getUserId);
         this.invertCarOverlay();
     }

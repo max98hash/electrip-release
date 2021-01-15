@@ -4,7 +4,6 @@
         width="256"
     >
         <v-navigation-drawer
-            floating
             permanent
         >
             <v-list

@@ -3,6 +3,19 @@ const axios = require('axios');
 const state = {
     trajects: [
         //{ brand: 'Renault', model: 'Zoé', years: '2019', matriculationNbr: 'XC-24D6-FD', autonomy: '120' },
+        { 
+            _id: "4654revze5r48vzc6z54f89",
+            name: "Bordeaux -> Castres",
+            startCoord: [-0.579027, 44.837638],
+            startName: "Place Rohan",
+            endCoord: [2.24, 43.605831],
+            endName: "Rue Émile Zola",
+            userId: "6001a58a2e36c0002ba9b284",
+            distance: 312980.688,
+            date: "2021-01-15",
+            carId: "90949a02ba9b284",
+            carName: "Nissan Juke"
+        }
     ],
     origin: null,
     destination: null,
@@ -12,16 +25,18 @@ const state = {
     date: null,
     carOverlay: false,
     carId: null,
+    carName: null,
 };
 
 const getters = {
-    getTrajects: state => state.cars,
+    getTrajects: state => state.trajects,
     getOrigin: state => state.origin,
     getDestination: state => state.destination,
     getOriginName: state => state.originName,
     getDestinationName: state => state.destinationName,
     getCalendarOverlay: state => state.calendarOverlay,
     getCarOverlay: state => state.carOverlay,
+    getCarName: state => state.carName,
 };
 
 const actions = {
@@ -92,10 +107,12 @@ const mutations = {
         state.originName = null;
         state.destinationName = null;
         state.carId = null;
+        state.carName = null;
     },
     invertCalendarOverlay: state => state.calendarOverlay=!state.calendarOverlay,
     invertCarOverlay: state => state.carOverlay=!state.carOverlay,
     setCar: (state, carId) => state.carId = carId,
+    setCarName: (state, carName) => state.carName = carName,
 };
 
 export default {

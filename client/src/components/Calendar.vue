@@ -10,7 +10,7 @@
           :value="today"
           :events="events"
           color="primary"
-          type="week"
+          type="month"
           class="calendar"
         ></v-calendar>
       </v-sheet>

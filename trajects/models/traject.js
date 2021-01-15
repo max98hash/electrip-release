@@ -10,6 +10,7 @@ const trajectSchema = mongoose.Schema({
   distance: { type: Number, required: true },
   date : { type: String, required: true },
   carId: {type: String, required: true},
+  carName: {type: String, required: true},
 });
 
 module.exports = mongoose.model('Traject', trajectSchema);
