@@ -2,8 +2,19 @@
   <div id="app">
     
     <router-view/>
+    <LoginOverlay/>
   </div>
 </template>
+
+<script>
+import LoginOverlay from "./components/LoginOverlay"
+export default {
+  name: 'App',
+  components: {
+    LoginOverlay,
+  },
+}
+</script>
 
 <style lang="scss">
 #app {
