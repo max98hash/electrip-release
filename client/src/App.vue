@@ -3,15 +3,19 @@
     
     <router-view/>
     <LoginOverlay/>
+    <CalendarOverlay/>
   </div>
 </template>
 
 <script>
 import LoginOverlay from "./components/LoginOverlay"
+import CalendarOverlay from './components/TrajectOverlay'
+
 export default {
   name: 'App',
   components: {
     LoginOverlay,
+    CalendarOverlay,
   },
 }
 </script>
