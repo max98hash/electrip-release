@@ -19,30 +19,7 @@
             <TrajectsList/>
           </v-col>
           <v-col cols="12" lg="7" v-else>
-            <v-card
-              class="fill-height rounded-lg"
-              elevation="2"
-            >
-            <v-container
-            class="fill-height"
-            >
-              <v-row justify="center"
-            align="center">
-                <h1>
-                Pas encore de trajets
-                </h1>
-                <v-icon
-                      x-large
-                      right
-                      dark
-                      class="pl-3"
-
-                  >
-                      mdi-car-off
-                </v-icon>
-              </v-row>
-            </v-container>
-            </v-card>
+            <NoTrajects/>
           </v-col>
         </v-row>
       </v-container>
@@ -55,6 +32,7 @@ import Menu from '../components/Menu.vue';
 import BaseMapPure from '../components/BaseMapPure.vue';
 import Calendar from '../components/Calendar.vue';
 import TrajectsList from '../components/TrajectsList.vue';
+import NoTrajects from '../components/NoTrajects';
 
 export default {
   name: 'Home',
@@ -63,10 +41,11 @@ export default {
     BaseMapPure,
     Calendar,
     TrajectsList,
+    NoTrajects,
   },
   methods: {
     trajectsIsNull(){
-      if(this.$store.state.trajects.trajects==[]){
+      if(this.$store.state.trajects.trajects==""){
         return false
       }
       return true
