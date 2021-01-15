@@ -10,6 +10,8 @@ const state = {
     destinationName: null,
     calendarOverlay: false,
     date: null,
+    carOverlay: false,
+    carId: null,
 };
 
 const getters = {
@@ -19,6 +21,7 @@ const getters = {
     getOriginName: state => state.originName,
     getDestinationName: state => state.destinationName,
     getCalendarOverlay: state => state.calendarOverlay,
+    getCarOverlay: state => state.carOverlay,
 };
 
 const actions = {
@@ -49,25 +52,26 @@ const actions = {
             'language=fr&'+
             'access_token=pk.eyJ1IjoibWF4aGFzaCIsImEiOiJja2h5dXRoajAwOGpnMnlvaDh1bTEwMDY4In0.k8O0vTEqjd0t6WHOHiS_8A'
         const infos = await axios.get(url);
-        console.log(infos.data);
         const waypoints = infos.data.waypoints.length;
-        //const start = infos.data.waypoints[0].name+" -> "+infos.data.waypoints[waypoints-1].name;
         const origin = state.originName.split(',')[0];
         const destination = state.destinationName.split(',')[0];
         const label = origin+" -> "+destination;
+        console.log(infos);
         const payload = {
             name: label,
             startCoord: infos.data.waypoints[0].location,
-            startName: infos.data.waypoints[0].name,
+            startName: infos.data.waypoints[0].name != "" ? infos.data.waypoints[0].name : origin,
             endCoord: infos.data.waypoints[waypoints-1].location,
-            endName: infos.data.waypoints[waypoints-1].name,
+            endName: infos.data.waypoints[waypoints-1].name != "" ? infos.data.waypoints[waypoints-1].name : destination,
             userId: userId,
             distance: infos.data.routes[0].distance,
-            date: state.date
+            date: state.date,
+            carId: state.carId,
             //coordinates: infos.data.routes[0].geometry.coordinates,
         }
         console.log(payload);
         const trajet = await axios.post('http://localhost:5555/trajects/create',payload);
+        console.log(trajet);
         commit('newTraject',trajet.data);
     }
 };
@@ -87,8 +91,11 @@ const mutations = {
         state.calendarOverlay = false;
         state.originName = null;
         state.destinationName = null;
+        state.carId = null;
     },
     invertCalendarOverlay: state => state.calendarOverlay=!state.calendarOverlay,
+    invertCarOverlay: state => state.carOverlay=!state.carOverlay,
+    setCar: (state, carId) => state.carId = carId,
 };
 
 export default {

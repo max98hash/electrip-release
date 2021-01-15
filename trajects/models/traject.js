@@ -9,6 +9,7 @@ const trajectSchema = mongoose.Schema({
   userId: { type: String, required: true },
   distance: { type: Number, required: true },
   date : { type: String, required: true },
+  carId: {type: String, required: true},
 });
 
 module.exports = mongoose.model('Traject', trajectSchema);

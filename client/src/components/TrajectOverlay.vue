@@ -31,12 +31,14 @@ export default {
   }),
   computed: mapGetters(['getCalendarOverlay','getUserId']),
   methods: {
-    ...mapActions(['login','register','addtraject']),
-    ...mapMutations(['invertCalendarOverlay','setDate']),
+    ...mapActions(['login','register','addtraject','fetchCars']),
+    ...mapMutations(['invertCalendarOverlay','setDate','invertCarOverlay']),
     getDate(){
         this.setDate(this.date);
-        console.log(this.date)
-        this.addtraject(this.getUserId);
+        //this.addtraject(this.getUserId);
+        this.invertCalendarOverlay();
+        this.fetchCars(this.getUserId)
+        this.invertCarOverlay();
     }
   },
 }

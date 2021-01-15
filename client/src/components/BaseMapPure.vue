@@ -50,12 +50,14 @@ export default {
     });
 
     directions.on('route',() => {
-      const inputs = document.getElementsByTagName('input');
-      this.setOriginName(inputs[0].value);
-      this.setDestinationName(inputs[1].value);
-      this.setDestination(directions.getDestination().geometry.coordinates.toString());
-      this.setOrigin(directions.getOrigin().geometry.coordinates.toString());
-      this.invertCalendarOverlay();
+      if(this.getCalendarOverlay==false || this.getCalendarOverlay==null){
+        const inputs = document.getElementsByTagName('input');
+        this.setOriginName(inputs[0].value);
+        this.setDestinationName(inputs[1].value);
+        this.setDestination(directions.getDestination().geometry.coordinates.toString());
+        this.setOrigin(directions.getOrigin().geometry.coordinates.toString());
+        this.invertCalendarOverlay();
+      }
     })
 
     map.addControl(directions,

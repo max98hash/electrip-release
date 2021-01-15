@@ -3,9 +3,9 @@ const axios = require('axios');
 const state = {
     createCar: true,
     cars: [
-        { brand: 'Renault', model: 'Zoé', years: '2019', matriculationNbr: 'XC-24D6-FD', autonomy: '120' },
+        /*{ brand: 'Renault', model: 'Zoé', years: '2019', matriculationNbr: 'XC-24D6-FD', autonomy: '120' },
         { brand: 'Tesla', model: 'Model S', years: '2018', matriculationNbr: 'KN-XM9Q-ZE', autonomy: '150' },
-        { brand: 'Nissan', model: 'Leaf', years: '2020', matriculationNbr: 'LM-28RP-QM', autonomy: '210' },
+        { brand: 'Nissan', model: 'Leaf', years: '2020', matriculationNbr: 'LM-28RP-QM', autonomy: '210' },*/
       ],
 };
 
@@ -27,7 +27,7 @@ const actions = {
             },
         });*/
         const response = await axios.get('http://localhost:3000/cars/user/'+userId);
-        console.log(response.data);
+        console.log("fetch cars : "+response.data);
         commit('setCars',response.data);
     },
     async addCar({commit},car){
@@ -35,7 +35,7 @@ const actions = {
         const response = await axios.post(
             'http://localhost:3000/cars/create',car
         );
-        console.log(response.data);
+        console.log("add car : "+response.data);
         commit('newCar',response.data);
     }
 };

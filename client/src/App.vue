@@ -4,18 +4,21 @@
     <router-view/>
     <LoginOverlay/>
     <CalendarOverlay/>
+    <CarPickerOverlay/>
   </div>
 </template>
 
 <script>
 import LoginOverlay from "./components/LoginOverlay"
 import CalendarOverlay from './components/TrajectOverlay'
+import CarPickerOverlay from './components/CarPickerLayout'
 
 export default {
   name: 'App',
   components: {
     LoginOverlay,
     CalendarOverlay,
+    CarPickerOverlay,
   },
 }
 </script>

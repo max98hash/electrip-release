@@ -54,7 +54,7 @@ export default {
       ...mapMutations(['setCreateCar']),
       ...mapActions(['fetchCars']),
     },
-    created(){
+    mounted(){
       this.fetchCars(this.getUserId);
     },
 }
