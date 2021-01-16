@@ -100,7 +100,9 @@ const actions = {
             console.log(req.data.length);
             if(state.allTrajects){
                 console.log("All trajects : on affiche tous les trajets")
-                console.log(req.data)
+                req.data.sort(function custom_sort(traject1, traject2) {
+                    return new Date(traject1.date).getTime() - new Date(traject2.date).getTime();
+                });
                 commit('setTrajects',req.data);
             }else{
                 let newTrajects = [];
@@ -110,6 +112,9 @@ const actions = {
                 }else{
                     newTrajects = req.data.filter(traject => new Date(traject.date) >= new Date(state.startDate) && new Date(traject.date) <= new Date(state.endDate));
                 }
+                newTrajects.sort(function custom_sort(traject1, traject2) {
+                    return new Date(traject1.date).getTime() - new Date(traject2.date).getTime();
+                });
                 console.log(newTrajects)
                 commit('setTrajects',newTrajects);
             } 
@@ -204,7 +209,12 @@ const mutations = {
     setOriginName: (state, originName) => state.originName = originName,
     setDestinationName: (state, destinationName) => state.destinationName = destinationName,
     newTraject: (state, traject) => {
-        state.trajects.push(traject)
+        let temp = state.trajects
+        temp.push(traject);
+        temp.sort(function custom_sort(traject1, traject2) {
+            return new Date(traject1.date).getTime() - new Date(traject2.date).getTime();
+        });
+        state.trajects = temp;
         state.origin = null;
         state.destination = null;
         state.date = null;
