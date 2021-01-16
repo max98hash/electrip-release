@@ -44,6 +44,8 @@ const state = {
     map: null,
     startDate: null,
     endDate: null,
+    allTrajects: false,
+    trajectsButFiltered: true,
 };
 
 const getters = {
@@ -62,6 +64,7 @@ const getters = {
     getTrajectsSelected: state => state.trajectsSelected,
     getStartDate: state => state.startDate,
     getEndDate: state => state.endDate,
+    getAllTrajects: state => state.allTrajects,
 };
 
 const actions = {
@@ -90,10 +93,35 @@ const actions = {
                 userId: userId
             },
         });*/
-        const req = await axios.get('http://localhost:5555/trajects/user/'+userId);
-        console.log("Trajects : ");
-        console.log(req.data)
-        commit('setTrajects',req.data);
+        if(userId!=null){
+            state.trajectsButFiltered=true;
+            const req = await axios.get('http://localhost:5555/trajects/user/'+userId);
+            console.log("Data length");
+            console.log(req.data.length);
+            if(state.allTrajects){
+                console.log("All trajects : on affiche tous les trajets")
+                req.data.sort(function custom_sort(traject1, traject2) {
+                    return new Date(traject1.date).getTime() - new Date(traject2.date).getTime();
+                });
+                commit('setTrajects',req.data);
+            }else{
+                let newTrajects = [];
+                console.log("Specific dates selected : "+state.startDate+" to "+state.endDate)
+                if(state.startDate==state.endDate){
+                    newTrajects = req.data.filter(traject => traject.date==state.startDate);
+                }else{
+                    newTrajects = req.data.filter(traject => new Date(traject.date) >= new Date(state.startDate) && new Date(traject.date) <= new Date(state.endDate));
+                }
+                newTrajects.sort(function custom_sort(traject1, traject2) {
+                    return new Date(traject1.date).getTime() - new Date(traject2.date).getTime();
+                });
+                console.log(newTrajects)
+                commit('setTrajects',newTrajects);
+            } 
+        }else{
+            state.trajectsButFiltered=false;
+        }
+
     },
     async addtraject({commit},userId){
         const url = 'https://api.mapbox.com/directions/v5/'+
@@ -150,7 +178,27 @@ const actions = {
                 }})
         }
         commit('setTrajectsSelected',filteredTrajects);
-    }
+    },
+    /*async sortTrajects({commit}){
+        let trajectsBefore = state.trajects;
+        let filteredTrajects = [];
+        if(state.startDate==state.endDate){
+            filteredTrajects = state.trajects
+                .filter(traject => traject.date==state.startDate)
+                .map(traject => { return {
+                    name: traject.name,
+                    start: state.startDate,
+                    color: 'blue',
+                }})
+        }else{
+            let trajectsInBetween = state.trajects.filter(traject => new Date(traject.date) >= new Date(state.startDate) && new Date(traject.date) <= new Date(state.endDate))
+            filteredTrajects = trajectsInBetween.map(traject => { return {
+                    name: traject.name,
+                    start: traject.date,
+                    color: 'blue',
+                }})
+        }
+    }*/
 };
 
 const mutations = {
@@ -161,7 +209,12 @@ const mutations = {
     setOriginName: (state, originName) => state.originName = originName,
     setDestinationName: (state, destinationName) => state.destinationName = destinationName,
     newTraject: (state, traject) => {
-        state.trajects.push(traject)
+        let temp = state.trajects
+        temp.push(traject);
+        temp.sort(function custom_sort(traject1, traject2) {
+            return new Date(traject1.date).getTime() - new Date(traject2.date).getTime();
+        });
+        state.trajects = temp;
         state.origin = null;
         state.destination = null;
         state.date = null;
@@ -183,6 +236,8 @@ const mutations = {
     setTrajectsSelected: (state, trajectsFiltered) => state.trajectsSelected = trajectsFiltered,
     setStartDate: (state, start) => state.startDate = start,
     setEndDate: (state, end) => state.endDate = end,
+    setAllTrajectsToFalse: state => state.allTrajects = false,
+    setAllTrajectsToTrue: state => state.allTrajects = true,
 };
 
 export default {
