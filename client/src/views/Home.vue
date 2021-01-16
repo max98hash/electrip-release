@@ -18,7 +18,7 @@
           <v-col v-if="this.$store.state.trajects.picker" cols="12" lg="7" class="mt-2">
             <TrajectPicker/>
           </v-col>
-          <v-col v-else-if="trajectsIsNull()" cols="12" lg="7" >
+          <v-col v-else-if="this.$store.state.trajects.trajectsButFiltered" cols="12" lg="7" >
             <TrajectsList/>
           </v-col>
           <v-col cols="12" lg="7" v-else>

@@ -113,10 +113,10 @@ import { mapGetters, mapActions, mapMutations } from 'vuex';
         names: ['Meeting', 'Holiday', 'PTO', 'Travel', 'Event', 'Birthday', 'Conference', 'Party'],
       }
     },
-    computed: mapGetters(['getTrajectsSelected','getTrajects']),
+    computed: mapGetters(['getTrajectsSelected','getTrajects','getUserId']),
     methods: {
-      ...mapActions(['filterSelectedTrajects']),
-      ...mapMutations(['setStartDate','setEndDate']),
+      ...mapActions(['filterSelectedTrajects','fetchTrajects']),
+      ...mapMutations(['setStartDate','setEndDate','setAllTrajectsToFalse']),
       viewDay ({ date }) {
         this.focus = date
         this.type = 'day'
@@ -136,10 +136,12 @@ import { mapGetters, mapActions, mapMutations } from 'vuex';
       next () {
         this.$refs.calendar.next()
       },
-      updateRange ({ start, end }) {
-        this.focus = start.date
+      async updateRange ({ start, end }) {
+        this.setAllTrajectsToFalse()
+        this.focus = end.date
         this.setStartDate(start.date);
         this.setEndDate(end.date);
+        await this.fetchTrajects(this.getUserId);
         this.filterSelectedTrajects();
         /*const events = []
 
