@@ -13,7 +13,7 @@ const cars = require('./routes/cars');
 
 const DBNAME = "cars";
 const HOST = "mongodb:27017";
-const HOST_LOCAL = "localhost";
+const HOST_LOCAL = "localhost:27017";
 
 mongoose.connect(`mongodb://${HOST}/${DBNAME}`,
     { useNewUrlParser: true,
