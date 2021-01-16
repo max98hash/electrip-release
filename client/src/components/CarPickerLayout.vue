@@ -1,8 +1,5 @@
 <template>
-    <v-overlay
-        :value="getCarOverlay"
-    >
-    <v-simple-table>
+    <v-simple-table class="mb-12">
         <thead>
             <tr>
             <th class="text-left">
@@ -44,37 +41,32 @@
             </td>
             </tr>
         </tbody>
-        </v-simple-table>
-    </v-overlay>
+    </v-simple-table>
 </template>
 
 <script>
 import { mapGetters, mapMutations, mapActions } from 'vuex';
 
 export default {
-  name: 'LoginOverlay',
+  name: 'CarPicker',
   data: () => ({
     
   }),
-  computed: mapGetters(['getCarOverlay','getUserId','getCars','getCarName']),
+  computed: mapGetters(['getCarOverlay','getUserId','getCars','getCarName','getUserId']),
   methods: {
-    ...mapActions(['addtraject']),
-    ...mapMutations(['invertCarOverlay','setCar','setCarName']),
-    getDate(){
-        this.setDate(this.date);
-        console.log(this.date)
-        this.addtraject(this.getUserId);
-    },
+    ...mapActions(['addtraject','fetchCars']),
+    ...mapMutations(['invertCarOverlay','setCar','setCarName','plusPickerStep']),
     getCarSelected(event){
         let carParams = event.currentTarget.id;
-        carParams.split(',');
+        carParams = carParams.split(',');
         let carId = carParams[0];
         this.setCar(carId);
-        console.log("voiture : "+carParams[1]+" "+carParams[2])
         this.setCarName(carParams[1]+" "+carParams[2]);
-        this.addtraject(this.getUserId);
-        this.invertCarOverlay();
+        this.plusPickerStep();
     }
   },
+  mounted(){
+      this.fetchCars(this.getUserId)
+  }
 }
 </script>

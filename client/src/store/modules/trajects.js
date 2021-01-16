@@ -3,7 +3,7 @@ const axios = require('axios');
 const state = {
     trajects: [
         //{ brand: 'Renault', model: 'Zoé', years: '2019', matriculationNbr: 'XC-24D6-FD', autonomy: '120' },
-        { 
+        /*{ 
             _id: "4654revze5r48vzc6z54f89",
             name: "Bordeaux -> Castres",
             startCoord: [-0.579027, 44.837638],
@@ -15,7 +15,7 @@ const state = {
             date: "2021-01-15",
             carId: "90949a02ba9b284",
             carName: "Nissan Juke"
-        }
+        }*/
     ],
     origin: null,
     destination: null,
@@ -26,6 +26,9 @@ const state = {
     carOverlay: false,
     carId: null,
     carName: null,
+    picker: false,
+    pickerStep: 1,
+    map: null,
 };
 
 const getters = {
@@ -37,6 +40,10 @@ const getters = {
     getCalendarOverlay: state => state.calendarOverlay,
     getCarOverlay: state => state.carOverlay,
     getCarName: state => state.carName,
+    getDate: state => state.date,
+    getTrajectPicker: state => state.picker,
+    getPickerStep: state => state.pickerStep,
+    getMap: state => state.map,
 };
 
 const actions = {
@@ -82,6 +89,7 @@ const actions = {
             distance: infos.data.routes[0].distance,
             date: state.date,
             carId: state.carId,
+            carName: state.carName
             //coordinates: infos.data.routes[0].geometry.coordinates,
         }
         console.log(payload);
@@ -111,8 +119,13 @@ const mutations = {
     },
     invertCalendarOverlay: state => state.calendarOverlay=!state.calendarOverlay,
     invertCarOverlay: state => state.carOverlay=!state.carOverlay,
+    invertTrajectPicker: state => state.picker=!state.picker,
     setCar: (state, carId) => state.carId = carId,
     setCarName: (state, carName) => state.carName = carName,
+    plusPickerStep: state => state.pickerStep = state.pickerStep+1,
+    minusPickerStep: state => state.pickerStep = state.pickerStep-1,
+    initPickerStep: state => state.pickerStep = 1,
+    setMap: (state, map) => state.map = map,
 };
 
 export default {

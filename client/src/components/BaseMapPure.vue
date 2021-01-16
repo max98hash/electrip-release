@@ -15,9 +15,9 @@ export default {
       accessToken: 'pk.eyJ1IjoibWF4aGFzaCIsImEiOiJja2h5dXRoajAwOGpnMnlvaDh1bTEwMDY4In0.k8O0vTEqjd0t6WHOHiS_8A',
     };
   },
-  computed: mapGetters(['getOrigin','getDestination','getUserId','getCalendarOverlay']),
+  computed: mapGetters(['getOrigin','getDestination','getUserId','getCalendarOverlay','getTrajectPicker']),
   methods: {
-    ...mapMutations(['setOrigin','setDestination','invertCalendarOverlay','setOriginName','setDestinationName']),
+    ...mapMutations(['setOrigin','setDestination','invertCalendarOverlay','setOriginName','setDestinationName','invertTrajectPicker','setMap']),
     ...mapActions(['fetchTrajects','addtraject']),
   },
   mounted() {
@@ -50,15 +50,18 @@ export default {
     });
 
     directions.on('route',() => {
-      if(this.getCalendarOverlay==false || this.getCalendarOverlay==null){
         const inputs = document.getElementsByTagName('input');
         this.setOriginName(inputs[0].value);
         this.setDestinationName(inputs[1].value);
         this.setDestination(directions.getDestination().geometry.coordinates.toString());
         this.setOrigin(directions.getOrigin().geometry.coordinates.toString());
-        this.invertCalendarOverlay();
+      if(this.getTrajectPicker==false ){
+        this.invertTrajectPicker();
+        //this.invertCalendarOverlay();
       }
     })
+
+    this.setMap(directions);
 
     map.addControl(directions,
     'top-left'

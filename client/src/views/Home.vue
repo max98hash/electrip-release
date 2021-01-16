@@ -15,7 +15,10 @@
           <v-col cols="12" lg="4">
             <Calendar/>
           </v-col>
-          <v-col v-if="trajectsIsNull()" cols="12" lg="7" >
+          <v-col v-if="this.$store.state.trajects.picker" cols="12" lg="7" class="mt-2">
+            <TrajectPicker/>
+          </v-col>
+          <v-col v-else-if="trajectsIsNull()" cols="12" lg="7" >
             <TrajectsList/>
           </v-col>
           <v-col cols="12" lg="7" v-else>
@@ -28,11 +31,13 @@
 </template>
 
 <script>
+//import { mapGetters } from 'vuex';
 import Menu from '../components/Menu.vue';
 import BaseMapPure from '../components/BaseMapPure.vue';
 import Calendar from '../components/Calendar.vue';
 import TrajectsList from '../components/TrajectsList.vue';
 import NoTrajects from '../components/NoTrajects';
+import TrajectPicker from '../components/TrajectPicker';
 
 export default {
   name: 'Home',
@@ -42,6 +47,7 @@ export default {
     Calendar,
     TrajectsList,
     NoTrajects,
+    TrajectPicker,
   },
   methods: {
     trajectsIsNull(){
