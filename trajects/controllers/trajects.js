@@ -35,13 +35,13 @@ exports.createTraject = (req, res, next) => {
                 return res.status(201).json(result);
         }
     );
-};
+}*/;
 
-exports.deleteCar = (req, res, next) => {
-    Car.findByIdAndDelete(req.params.id, (err, result) => {
+exports.deleteTraject = (req, res, next) => {
+    Traject.findByIdAndDelete(req.params.id, (err, result) => {
         if (err) 
                 return res.status(400).json(err);
             else
-                return res.status(201).json({ message: "car successfully deleted!", result });
+                return res.status(201).json({ message: "traject successfully deleted!", result });
     })
-}*/
+}

@@ -19,7 +19,7 @@
             <TrajectPicker/>
           </v-col>
           <v-col v-else-if="this.$store.state.trajects.trajectsButFiltered" cols="12" lg="7" >
-            <TrajectsList/>
+            <CarsTrajects/>
           </v-col>
           <v-col cols="12" lg="7" v-else>
             <NoTrajects/>
@@ -35,9 +35,10 @@
 import Menu from '../components/Menu.vue';
 import BaseMapPure from '../components/BaseMapPure.vue';
 import Calendar from '../components/Calendar.vue';
-import TrajectsList from '../components/TrajectsList.vue';
+//import TrajectsList from '../components/TrajectsList.vue';
 import NoTrajects from '../components/NoTrajects';
 import TrajectPicker from '../components/TrajectPicker';
+import CarsTrajects from '../components/CarsTrajects';
 
 export default {
   name: 'Home',
@@ -45,7 +46,7 @@ export default {
     Menu,
     BaseMapPure,
     Calendar,
-    TrajectsList,
+    CarsTrajects,
     NoTrajects,
     TrajectPicker,
   },

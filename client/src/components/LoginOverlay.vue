@@ -25,7 +25,7 @@
                 placeholder="********"
                 v-model="password"
                 type="password"
-                :rules="[rules.require]"
+                :rules="[rules.required]"
                 required
                 outlined
                 clearable

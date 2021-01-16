@@ -36,7 +36,8 @@ const actions = {
         const response = await axios.post(
             'http://localhost:3000/cars/create',car
         );
-        console.log("add car : "+response.data);
+        console.log("add car : ");
+        console.log(response.data)
         commit('newCar',response.data);
     }
 };

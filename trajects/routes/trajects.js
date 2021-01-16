@@ -1,14 +1,14 @@
 const express = require('express');
 const router = express.Router();
 
-const cars = require('../controllers/trajects');
+const trajects = require('../controllers/trajects');
 
 //const auth = require('../middleware/auth');
 
 //router.get('/:id', cars.getCar);
-router.get('/user/:userId', cars.getTrajects);
-router.post('/create', cars.createTraject);
-/*router.put('/:id', cars.modifyCar);
-router.delete('/:id', cars.deleteCar);*/
+router.get('/user/:userId', trajects.getTrajects);
+router.post('/create', trajects.createTraject);
+//router.put('/:id', cars.modifyCar);
+router.delete('/:id', trajects.deleteTraject);
 
 module.exports = router;

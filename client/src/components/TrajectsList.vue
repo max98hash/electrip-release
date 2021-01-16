@@ -49,19 +49,21 @@
                             <v-icon
                                 right
                                 dark
+                                class="mb-1"
                             >
-                                mdi-map-marker
+                                mdi-home-map-marker
                             </v-icon>
-                            Origin : {{ traject.startName || 'Not set' }}
+                            {{ traject.startName || 'Not set' }}
                         </v-col>
                         <v-col cols="12" md="3">
                             <v-icon
                                 right
                                 dark
+                                class="mb-1"
                             >
-                                mdi-map-marker-check
+                                mdi-flag-checkered
                             </v-icon>
-                            Destination : {{ traject.endName || 'Not set' }}
+                            {{ traject.endName || 'Not set' }}
                         </v-col>
                         <v-col cols="12" md="3">
                             <v-icon
@@ -79,7 +81,7 @@
                         no-gutters
                         class="pt-3"
                         >
-                        <v-col cols="12" md="5" class="pb-2">
+                        <v-col cols="12" md="4" class="pb-2">
                             <v-btn
                                 depressed
                                 color="primary"
@@ -98,7 +100,7 @@
                             </v-btn>
                         </v-col>
 
-                        <v-col cols="12" md="5">
+                        <v-col cols="12" md="5" class="pb-2">
                             <v-btn
                                 depressed
                                 color="indigo"
@@ -113,6 +115,23 @@
                                 mdi-ev-station
                             </v-icon>
                                 Find charging stations
+                            </v-btn>
+                        </v-col>
+                        <v-col cols="3" md="5">
+                            <v-btn
+                                depressed
+                                color="red"
+                                :id="traject._id"
+                                @click="remove($event)"
+                            >
+                            <v-icon
+                                right
+                                dark
+                                class="pr-6"
+                            >
+                                mdi-minus
+                            </v-icon>
+                                Delete
                             </v-btn>
                         </v-col>
                         </v-row>
@@ -147,9 +166,14 @@ export default {
     computed: mapGetters(['getCarName','getTrajects','getUserId','getAllTrajects']),
     methods: {
         ...mapMutations(['setCarName','setAllTrajectsToTrue']),
-        ...mapActions(['fetchTrajects','addtraject','filterSelectedTrajects']),
+        ...mapActions(['fetchTrajects','addtraject','filterSelectedTrajects','deleteTraject']),
         showButton(event){
             console.log(event.currentTarget.id)
+        },
+        async remove(event){
+            let trajectId = event.currentTarget.id;
+            await this.deleteTraject(trajectId);
+            this.filterSelectedTrajects();
         },
         async showAllTrajects(){
             this.setAllTrajectsToTrue();

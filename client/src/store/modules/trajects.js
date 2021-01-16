@@ -68,21 +68,12 @@ const getters = {
 };
 
 const actions = {
-    /*async fetchTrajects({commit},userId){
-        const response = await axios.get({
-            method: 'GET',
-            url: 'http://localhost:3000/cars',
-            headers: {
-                'Authorization': token
-            },
-            data: {
-                userId: userId
-            },
-        });
-        const response = await axios.get('http://localhost:5555/trajects/user/'+userId);
-        console.log("Trajects : "+response.data);
-        commit('setTrajects',response.data);
-    },*/
+    async deleteTraject({commit},trajectId){
+        const response = await axios.delete('http://localhost:5555/trajects/'+trajectId);
+        console.log("Traject deleted : ");
+        console.log(response.data)
+        commit('setAfterRemoveTraject',trajectId);
+    },
     async fetchTrajects({commit},userId){
         console.log("fetchTrajects")
         console.log("userId before request "+userId)
@@ -96,17 +87,13 @@ const actions = {
         if(userId!=null){
             state.trajectsButFiltered=true;
             const req = await axios.get('http://localhost:5555/trajects/user/'+userId);
-            console.log("Data length");
-            console.log(req.data.length);
             if(state.allTrajects){
-                console.log("All trajects : on affiche tous les trajets")
                 req.data.sort(function custom_sort(traject1, traject2) {
                     return new Date(traject1.date).getTime() - new Date(traject2.date).getTime();
                 });
                 commit('setTrajects',req.data);
             }else{
                 let newTrajects = [];
-                console.log("Specific dates selected : "+state.startDate+" to "+state.endDate)
                 if(state.startDate==state.endDate){
                     newTrajects = req.data.filter(traject => traject.date==state.startDate);
                 }else{
@@ -115,7 +102,6 @@ const actions = {
                 newTrajects.sort(function custom_sort(traject1, traject2) {
                     return new Date(traject1.date).getTime() - new Date(traject2.date).getTime();
                 });
-                console.log(newTrajects)
                 commit('setTrajects',newTrajects);
             } 
         }else{
@@ -179,26 +165,6 @@ const actions = {
         }
         commit('setTrajectsSelected',filteredTrajects);
     },
-    /*async sortTrajects({commit}){
-        let trajectsBefore = state.trajects;
-        let filteredTrajects = [];
-        if(state.startDate==state.endDate){
-            filteredTrajects = state.trajects
-                .filter(traject => traject.date==state.startDate)
-                .map(traject => { return {
-                    name: traject.name,
-                    start: state.startDate,
-                    color: 'blue',
-                }})
-        }else{
-            let trajectsInBetween = state.trajects.filter(traject => new Date(traject.date) >= new Date(state.startDate) && new Date(traject.date) <= new Date(state.endDate))
-            filteredTrajects = trajectsInBetween.map(traject => { return {
-                    name: traject.name,
-                    start: traject.date,
-                    color: 'blue',
-                }})
-        }
-    }*/
 };
 
 const mutations = {
@@ -211,6 +177,7 @@ const mutations = {
     newTraject: (state, traject) => {
         let temp = state.trajects
         temp.push(traject);
+        temp.filter(traject => new Date(traject.date) >= new Date(state.startDate) && new Date(traject.date) <= new Date(state.endDate))
         temp.sort(function custom_sort(traject1, traject2) {
             return new Date(traject1.date).getTime() - new Date(traject2.date).getTime();
         });
@@ -238,6 +205,11 @@ const mutations = {
     setEndDate: (state, end) => state.endDate = end,
     setAllTrajectsToFalse: state => state.allTrajects = false,
     setAllTrajectsToTrue: state => state.allTrajects = true,
+    setAfterRemoveTraject: (state, trajectId) => {
+        let temp = state.trajects;
+        temp = state.trajects.filter(traject => traject._id!=trajectId);
+        state.trajects = temp;
+    },
 };
 
 export default {
