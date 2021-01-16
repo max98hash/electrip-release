@@ -29,7 +29,7 @@
                     <v-list-item-title>Login</v-list-item-title>
                 </v-list-item-content>
             </v-list-item>
-            <v-list-item v-if="getLogged" v-on:click="logout" link>
+            <v-list-item v-if="getLogged" v-on:click="setLogout" link>
                 <v-list-item-content>
                     <v-list-item-title>Logout</v-list-item-title>
                 </v-list-item-content>
@@ -64,6 +64,14 @@ export default {
         setLogin(){
             this.invertOverlayLogin();
             this.invertLoginOrRegister();
+            
+        },
+        async setLogout(){
+            this.$store.state.trajects.allTrajects=false;
+            this.$store.state.trajects.trajectsButFiltered=false;
+            this.$store.state.trajects.trajects=[];
+            this.$store.state.trajects.trajectsSelected=[];
+            this.logout();
         }
     },
     
