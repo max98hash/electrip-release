@@ -13,9 +13,9 @@ const trajects = require('./routes/trajects');
 
 const DBNAME = "trajects";
 const HOST = "mongodb:27017";
-const HOST_LOCAL = "localhost";
+const HOST_LOCAL = "localhost:27017";
 
-mongoose.connect(`mongodb://${HOST}/${DBNAME}`,
+mongoose.connect(`mongodb://${HOST_LOCAL}/${DBNAME}`,
     { useNewUrlParser: true,
     useUnifiedTopology: true })
 .then(() => console.log('Connexion à MongoDB réussie !'))

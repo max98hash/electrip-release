@@ -11,4 +11,6 @@ router.post('/create', cars.createTraject);
 /*router.put('/:id', cars.modifyCar);
 router.delete('/:id', cars.deleteCar);*/
 
+router.get('/user/:userId/:dateBeg/:dateEnd', cars.getTrajectsBetweenDates);
+
 module.exports = router;
