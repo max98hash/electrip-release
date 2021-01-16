@@ -120,16 +120,17 @@ export default {
             e1: 1,
         }
     },
-    computed: mapGetters(['getPickerStep','getOriginName','getDestinationName','getCarName','getDate','getMap','getUserId']),
+    computed: mapGetters(['getPickerStep','getOriginName','getDestinationName','getCarName','getDate','getMap','getUserId','getEndDate','getStartDate']),
     methods: {
-        ...mapActions(['addtraject','fetchCars']),
+        ...mapActions(['addtraject','fetchCars','filterSelectedTrajects']),
         ...mapMutations(['minusPickerStep','plusPickerStep','invertTrajectPicker','initPickerStep']),
-        submitTraject(){
+        async submitTraject(){
             const map = this.getMap;
             map.removeRoutes();
             this.invertTrajectPicker();
             this.initPickerStep();
-            this.addtraject(this.getUserId);
+            await this.addtraject(this.getUserId);
+            this.filterSelectedTrajects();
         },
     }
 }

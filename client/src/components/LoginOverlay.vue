@@ -72,15 +72,18 @@ export default {
           },
     }
   }),
-  computed: mapGetters(['getOverlayLogin','getLoginOrRegister']),
+  computed: mapGetters(['getOverlayLogin','getLoginOrRegister','getUserId']),
   methods: {
-    ...mapActions(['login','register']),
+    ...mapActions(['login','register','fetchCars','fetchTrajects','filterSelectedTrajects']),
     ...mapMutations(['invertOverlayLogin','invertLoginOrRegister']),
     async submit(){
         if(this.$refs.form.validate()){
             if(this.getLoginOrRegister){
-                this.login({email: this.email,password: this.password}); 
+                await this.login({email: this.email,password: this.password}); 
                 this.invertLoginOrRegister();
+                this.fetchCars(this.getUserId);
+                await this.fetchTrajects(this.getUserId);
+                this.filterSelectedTrajects();
             }else{
                 console.log("register");
                 this.register({email: this.email,password: this.password})

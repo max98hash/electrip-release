@@ -27,7 +27,8 @@ const actions = {
             },
         });*/
         const response = await axios.get('http://localhost:3000/cars/user/'+userId);
-        console.log("fetch cars : "+response.data);
+        console.log("fetch cars : ");
+        console.log(response.data)
         commit('setCars',response.data);
     },
     async addCar({commit},car){

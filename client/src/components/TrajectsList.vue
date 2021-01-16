@@ -1,7 +1,7 @@
 <template>
     <v-expansion-panels>
-        <v-expansion-panel v-for="traject in trajects" v-bind:key="traject.name">
-        <v-expansion-panel-header v-slot="{ open }">
+        <v-expansion-panel v-for="traject in getTrajects" v-bind:key="traject.name">
+        <v-expansion-panel-header>
             <v-row no-gutters>
             <v-col cols="4">
                 {{ traject.name }}
@@ -11,17 +11,26 @@
                 class="text--secondary"
             >
                 <v-fade-transition leave-absolute>
-                <span v-if="open">Details</span>
                 <v-row
-                    v-else
                     no-gutters
                     style="width: 100%"
+                    justify="center"
                 >
-                    <v-col cols="6">
-                    Distance: {{ Math.round(traject.distance * 0.01) / 10 || 'Not set' }} km
+                    <v-col cols="3">
+                    {{ Math.round(traject.distance * 0.01) / 10 || 'Not set' }} km
                     </v-col>
-                    <v-col cols="6">
+                    <v-col cols="3">
                     Charges: {{ traject.stations || 'Not set' }}
+                    </v-col>
+                    
+                    <v-col cols="4">
+                        <v-icon
+                        left
+                        dark
+                    >
+                        mdi-calendar
+                    </v-icon>
+                    {{ traject.date || 'Not set' }}
                     </v-col>
                 </v-row>
                 </v-fade-transition>
@@ -59,7 +68,7 @@
                 >
                     mdi-car-electric
                 </v-icon>
-                Car : {{ traject.carName || 'Not set' }}
+                {{ traject.carName || 'Not set' }}
             </v-col>
             </v-row>
             <v-divider></v-divider>
@@ -119,7 +128,7 @@ export default {
       date: null,
       trajects: this.$store.state.trajects.trajects,
     }},
-    computed: mapGetters(['getCarName']),
+    computed: mapGetters(['getCarName','getTrajects']),
     methods: {
         ...mapMutations(['setCarName']),
         ...mapActions(['fetchTrajects','addtraject']),
@@ -127,8 +136,5 @@ export default {
             console.log(event.currentTarget.id)
         }
     },
-    mounted(){
-        //console.log(this.$store.state.trajects.trajects);
-    }
 }
 </script>

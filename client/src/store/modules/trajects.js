@@ -2,7 +2,6 @@ const axios = require('axios');
 
 const state = {
     trajects: [
-        //{ brand: 'Renault', model: 'Zoé', years: '2019', matriculationNbr: 'XC-24D6-FD', autonomy: '120' },
         /*{ 
             _id: "4654revze5r48vzc6z54f89",
             name: "Bordeaux -> Castres",
@@ -15,8 +14,22 @@ const state = {
             date: "2021-01-15",
             carId: "90949a02ba9b284",
             carName: "Nissan Juke"
-        }*/
+        },
+        { 
+            _id: "4654revze5r48vzc6z54f89",
+            name: "Madrid -> Zaragoza",
+            startCoord: [-0.579027, 44.837638],
+            startName: "Place Rohan",
+            endCoord: [2.24, 43.605831],
+            endName: "Rue Émile Zola",
+            userId: "6001a58a2e36c0002ba9b284",
+            distance: 312980.688,
+            date: "2021-02-05",
+            carId: "90949a02ba9b284",
+            carName: "Nissan Juke"
+        },*/
     ],
+    trajectsSelected: [],
     origin: null,
     destination: null,
     originName: null,
@@ -29,6 +42,8 @@ const state = {
     picker: false,
     pickerStep: 1,
     map: null,
+    startDate: null,
+    endDate: null,
 };
 
 const getters = {
@@ -44,11 +59,14 @@ const getters = {
     getTrajectPicker: state => state.picker,
     getPickerStep: state => state.pickerStep,
     getMap: state => state.map,
+    getTrajectsSelected: state => state.trajectsSelected,
+    getStartDate: state => state.startDate,
+    getEndDate: state => state.endDate,
 };
 
 const actions = {
     /*async fetchTrajects({commit},userId){
-        /*const response = await axios.get({
+        const response = await axios.get({
             method: 'GET',
             url: 'http://localhost:3000/cars',
             headers: {
@@ -62,6 +80,21 @@ const actions = {
         console.log("Trajects : "+response.data);
         commit('setTrajects',response.data);
     },*/
+    async fetchTrajects({commit},userId){
+        console.log("fetchTrajects")
+        console.log("userId before request "+userId)
+        /*const req = await axios.get({
+            method: 'GET',
+            url: 'http://localhost:5555/trajects/user/'+userId,
+            data: {
+                userId: userId
+            },
+        });*/
+        const req = await axios.get('http://localhost:5555/trajects/user/'+userId);
+        console.log("Trajects : ");
+        console.log(req.data)
+        commit('setTrajects',req.data);
+    },
     async addtraject({commit},userId){
         const url = 'https://api.mapbox.com/directions/v5/'+
             'mapbox/driving/'+
@@ -89,13 +122,34 @@ const actions = {
             distance: infos.data.routes[0].distance,
             date: state.date,
             carId: state.carId,
-            carName: state.carName
+            carName: state.carName,
+            _id: "45zEFcae5fzf5efv86"
             //coordinates: infos.data.routes[0].geometry.coordinates,
         }
         console.log(payload);
         const trajet = await axios.post('http://localhost:5555/trajects/create',payload);
         console.log(trajet);
         commit('newTraject',trajet.data);
+    },
+    filterSelectedTrajects({commit}){
+        let filteredTrajects = [];
+        if(state.startDate==state.endDate){
+            filteredTrajects = state.trajects
+                .filter(traject => traject.date==state.startDate)
+                .map(traject => { return {
+                    name: traject.name,
+                    start: state.startDate,
+                    color: 'blue',
+                }})
+        }else{
+            let trajectsInBetween = state.trajects.filter(traject => new Date(traject.date) >= new Date(state.startDate) && new Date(traject.date) <= new Date(state.endDate))
+            filteredTrajects = trajectsInBetween.map(traject => { return {
+                    name: traject.name,
+                    start: traject.date,
+                    color: 'blue',
+                }})
+        }
+        commit('setTrajectsSelected',filteredTrajects);
     }
 };
 
@@ -126,6 +180,9 @@ const mutations = {
     minusPickerStep: state => state.pickerStep = state.pickerStep-1,
     initPickerStep: state => state.pickerStep = 1,
     setMap: (state, map) => state.map = map,
+    setTrajectsSelected: (state, trajectsFiltered) => state.trajectsSelected = trajectsFiltered,
+    setStartDate: (state, start) => state.startDate = start,
+    setEndDate: (state, end) => state.endDate = end,
 };
 
 export default {
