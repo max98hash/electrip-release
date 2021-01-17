@@ -7,7 +7,10 @@
             <Menu/>
           </v-col>
 
-          <v-col cols="12" md="9">
+          <v-col v-if="this.$store.state.map.displayCharging" cols="12" md="9">
+            <MapCharging/>
+          </v-col>
+          <v-col v-else cols="12" md="9">
             <BaseMapPure/>
           </v-col>
         </v-row>
@@ -39,6 +42,7 @@ import Calendar from '../components/Calendar.vue';
 import NoTrajects from '../components/NoTrajects';
 import TrajectPicker from '../components/TrajectPicker';
 import CarsTrajects from '../components/CarsTrajects';
+import MapCharging from  '../components/MapCharging';
 
 export default {
   name: 'Home',
@@ -49,6 +53,7 @@ export default {
     CarsTrajects,
     NoTrajects,
     TrajectPicker,
+    MapCharging,
   },
   methods: {
     trajectsIsNull(){

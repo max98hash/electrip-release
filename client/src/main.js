@@ -6,6 +6,8 @@ import store from './store/index'
 
 Vue.config.productionTip = false
 
+export const busMap = new Vue();
+
 new Vue({
   vuetify,
   router,

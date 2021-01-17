@@ -24,6 +24,16 @@
                 <v-list-item-title>{{ item.title }}</v-list-item-title>
                 </v-list-item-content>
             </v-list-item>
+            <v-list-item v-if="this.$store.state.map.displayCharging" v-on:click="setDisplayChargingFalse" link>
+                <v-list-item-content>
+                    <v-list-item-title>Hide charging</v-list-item-title>
+                </v-list-item-content>
+            </v-list-item>
+            <v-list-item v-if="!this.$store.state.map.displayCharging" v-on:click="setDisplayChargingTrue" link>
+                <v-list-item-content>
+                    <v-list-item-title>Show Charging</v-list-item-title>
+                </v-list-item-content>
+            </v-list-item>
             <v-list-item v-if="!getLogged" v-on:click="setLogin" link>
                 <v-list-item-content>
                     <v-list-item-title>Login</v-list-item-title>
@@ -58,9 +68,9 @@ export default {
           { title: 'Share', icon: 'mdi-account-group', path: '/share'  },
         ],
     }),
-    computed: mapGetters(['getLogged']),
+    computed: mapGetters(['getLogged','getDisplayCharging']),
     methods: {
-        ...mapMutations(['invertOverlayLogin','logout','invertLoginOrRegister']),
+        ...mapMutations(['invertOverlayLogin','logout','invertLoginOrRegister','setDisplayChargingTrue','setDisplayChargingFalse']),
         setLogin(){
             this.invertOverlayLogin();
             this.invertLoginOrRegister();

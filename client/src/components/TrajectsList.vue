@@ -105,7 +105,7 @@
                                 depressed
                                 color="indigo"
                                 :id="traject._id"
-                                @click="showButton($event)"
+                                @click="displayCharging($event)"
                             >
                             <v-icon
                                 right
@@ -156,6 +156,7 @@
 
 <script>
 import { mapGetters, mapMutations, mapActions } from 'vuex';
+import { busMap } from '../main';
 
 export default {
     data: function () {
@@ -179,6 +180,9 @@ export default {
             this.setAllTrajectsToTrue();
             await this.fetchTrajects(this.getUserId);
             this.filterSelectedTrajects();
+        },
+        displayCharging(event){
+            busMap.$emit('displayCharging',event.currentTarget.id);
         }
     },
 }
