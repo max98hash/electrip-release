@@ -1,11 +1,11 @@
 const Traject = require('../models/traject');
 const mongoose = require('mongoose');
 
-/*exports.getTraject = (req, res, next) => {
-	Car.findById(req.params.id)
+exports.getTraject = (req, res, next) => {
+	Traject.findById(req.params.id)
     .then(things => res.status(200).json(things))
     .catch(error => res.status(400).json({ error }));
-}*/
+}
 
 exports.getTrajects = (req, res, next) => {
     let userId = req.params.userId;

@@ -1,5 +1,5 @@
 const state =  {
-    displayCharging: false,
+    displayCharging: true,
 }
 
 const getters = {
