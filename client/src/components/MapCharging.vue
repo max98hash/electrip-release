@@ -23,8 +23,6 @@ export default {
     ...mapActions(['fetchTrajects']),
     async getTrajectGEOJSON(trajectId){
         const trajectBD = await axios.get('http://localhost:5555/trajects/'+trajectId);
-        //console.log("Traject en bd :")
-        //console.log(trajectBD.data);
         let startCoord = trajectBD.data.startCoord;
         let endCoord = trajectBD.data.endCoord;
         const url = 'https://api.mapbox.com/directions/v5/'+
@@ -39,48 +37,93 @@ export default {
     async getCarFromBD(carId){
         return await axios.get('http://localhost:3000/cars/'+carId)
     },
-    async displayCharging(trajectId){
-        const mapboxTraject = await this.getTrajectGEOJSON(trajectId);
-        console.log(mapboxTraject.data)
-        const distance = Math.round((mapboxTraject.data.routes[0].distance)*0.001)
-        const nbPoints = mapboxTraject.data.routes[0].geometry.coordinates.length;
-        console.log("Nb de points : "+nbPoints)
-        console.log("Nb de points par km : "+nbPoints/distance)
-        const car = await this.getCarFromBD(mapboxTraject.data.carId)
-        console.log(car)
+    rad(x){
+        return x * Math.PI / 180;
+    },
+    getDistance(p1,p2){
+        var R = 6378137; // Earth’s mean radius in meter
+        var dLat = this.rad(p2[0] - p1[0]);
+        var dLong = this.rad(p2[1] - p1[1]);
+        var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(this.rad(p1[0])) * Math.cos(this.rad(p2[0])) *
+            Math.sin(dLong / 2) * Math.sin(dLong / 2);
+        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        var d = R * c;
+        return d*0.001; // returns the distance in km
+    },
+    getChargingCoordinates(nbPoints,distance,carAutonomy,coordinates){
         let chargingCoordinates = [];
-        for (let index = 0; index < nbPoints; index+car.data.autonomy) {
-            index = index + Math.round((nbPoints/distance)*car.data.autonomy)
+        for (let index = 0; index < nbPoints; index+carAutonomy) {
+            index = index + Math.round((nbPoints/distance)*carAutonomy)
             chargingCoordinates.push(index);
         }
         chargingCoordinates.pop();
-        var coord = []
-        for(const index in chargingCoordinates){
-            coord.push(mapboxTraject.data.routes[0].geometry.coordinates[chargingCoordinates[index]])
+
+        let points = coordinates;
+        let kmSinceLastCharge = 0;
+        let coordCharging = [];
+        let lastPoint = points[0];
+        for (let index = 1; index < nbPoints; index++) {
+            if( kmSinceLastCharge + this.getDistance(points[index],lastPoint) >= carAutonomy){
+                coordCharging.push(lastPoint);
+                kmSinceLastCharge = this.getDistance(points[index],lastPoint);
+                lastPoint = points[index]
+            }else{
+                kmSinceLastCharge = kmSinceLastCharge + this.getDistance(points[index],lastPoint);
+                lastPoint = points[index]
+            }
         }
+
+        return coordCharging;
+    },
+    async displayCharging(trajectId){
+        const mapboxTraject = await this.getTrajectGEOJSON(trajectId);
+        const distance = Math.round((mapboxTraject.data.routes[0].distance)*0.001)
+        const nbPoints = mapboxTraject.data.routes[0].geometry.coordinates.length;
+        const car = await this.getCarFromBD(mapboxTraject.data.carId)
+
+        const coordCharging = this.getChargingCoordinates(nbPoints,distance,car.data.autonomy,mapboxTraject.data.routes[0].geometry.coordinates)
+
+        console.log('coordcharging')
+        console.log(coordCharging)
+
+        this.displayLayout(coordCharging,mapboxTraject.data.routes[0].geometry,mapboxTraject.data.routes[0].geometry.coordinates)
+
+    },
+    displayLayout(coordCharging,geometry,coordinates){
         var markers = {
             type: 'FeatureCollection',
             features: []
         }
-        for(const index in coord){
+        for(const index in coordCharging){
             markers.features.push({
                 type: 'Feature',
                 geometry: {
                     type: 'Point',
-                    coordinates: coord[index]
+                    coordinates: coordCharging[index]
                 }
             })
         }
-        console.log(markers);
+
         let map = this.getMapCharging;
+
+        if (map.getLayer('LineString')) {
+            map.removeLayer('LineString');
+            console.log("Layer Removed")
+        }
+        if (map.getSource('LineString')) {
+            map.removeSource('LineString');
+            console.log("Source Removed")
+        }
+
         map.addSource('LineString', {
             'type': 'geojson',
             'data': {
                 'type': 'Feature',
                 'geometry': {
                     'properties': {},
-                    'type': mapboxTraject.data.routes[0].geometry.type,
-                    'coordinates': mapboxTraject.data.routes[0].geometry.coordinates
+                    'type': geometry.type,
+                    'coordinates': geometry.coordinates
                 }
             }
         });
@@ -99,27 +142,30 @@ export default {
                 }
         });
 
-        markers.features.forEach(function(marker) {
+        var bounds = coordinates.reduce(function (bounds, coord) {
+            return bounds.extend(coord);
+        }, new mapboxgl.LngLatBounds(coordinates[0], coordinates[0]));
+        
+        map.fitBounds(bounds, {
+            padding: 20
+        });
+
+        this.displayMarkers(markers)
+    },
+    displayMarkers(markers){
+            let map = this.getMapCharging;
+            markers.features.forEach(function(marker) {
 
             // create a HTML element for each feature
             var el = document.createElement('div');
             el.className = 'marker';
-
-            console.log(marker.geometry.coordinates)
 
             // make a marker for each feature and add to the map
             new mapboxgl.Marker()
                 .setLngLat(marker.geometry.coordinates)
                 .addTo(map);
         });
-        var bounds = mapboxTraject.data.routes[0].geometry.coordinates.reduce(function (bounds, coord) {
-            return bounds.extend(coord);
-        }, new mapboxgl.LngLatBounds(mapboxTraject.data.routes[0].geometry.coordinates[0], mapboxTraject.data.routes[0].geometry.coordinates[0]));
-        
-        map.fitBounds(bounds, {
-            padding: 20
-        });
-    }           
+    }
 
   },
   mounted() {
@@ -164,13 +210,5 @@ export default {
   height: 600px;
   border-radius: 10px;
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-}
-.marker {
-  background-image: url('../../public/ev-station.png');
-  background-size: cover;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  cursor: pointer;
 }
 </style>
