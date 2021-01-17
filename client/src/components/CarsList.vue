@@ -45,7 +45,7 @@
           dark
           class="pr-6"
       >
-          mdi-plus
+          mdi-plus-circle
       </v-icon>
         Add Car
       </v-btn>

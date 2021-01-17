@@ -100,7 +100,7 @@
                             </v-btn>
                         </v-col>
 
-                        <v-col cols="12" md="5" class="pb-2">
+                        <v-col cols="12" md="4" class="pb-2">
                             <v-btn
                                 depressed
                                 color="indigo"
@@ -117,7 +117,7 @@
                                 Find charging stations
                             </v-btn>
                         </v-col>
-                        <v-col cols="3" md="5">
+                        <v-col cols="3" md="3">
                             <v-btn
                                 depressed
                                 color="red"
@@ -129,7 +129,7 @@
                                 dark
                                 class="pr-6"
                             >
-                                mdi-minus
+                                mdi-delete
                             </v-icon>
                                 Delete
                             </v-btn>
