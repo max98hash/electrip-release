@@ -177,11 +177,11 @@ const mutations = {
     newTraject: (state, traject) => {
         let temp = state.trajects
         temp.push(traject);
-        temp.filter(traject => new Date(traject.date) >= new Date(state.startDate) && new Date(traject.date) <= new Date(state.endDate))
-        temp.sort(function custom_sort(traject1, traject2) {
+        let temp2 = temp.filter(traject => new Date(traject.date) >= new Date(state.startDate) && new Date(traject.date) <= new Date(state.endDate))
+        temp2.sort(function custom_sort(traject1, traject2) {
             return new Date(traject1.date).getTime() - new Date(traject2.date).getTime();
         });
-        state.trajects = temp;
+        state.trajects = temp2;
         state.origin = null;
         state.destination = null;
         state.date = null;
