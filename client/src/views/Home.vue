@@ -37,7 +37,7 @@
 </template>
 
 <script>
-//import { mapGetters } from 'vuex';
+import { mapGetters } from 'vuex';
 import Menu from '../components/Menu.vue';
 import BaseMapPure from '../components/BaseMapPure.vue';
 import Calendar from '../components/Calendar.vue';
@@ -47,6 +47,7 @@ import TrajectPicker from '../components/TrajectPicker';
 import CarsTrajects from '../components/CarsTrajects';
 import MapCharging from  '../components/MapCharging';
 import StationPicker from '../components/StationsPicker';
+//import map from '../store/modules/map';
 
 export default {
   name: 'Home',
@@ -61,6 +62,7 @@ export default {
     StationPicker,
   },
   methods: {
+    ...mapGetters(['getDisplayATraject']),
     trajectsIsNull(){
       if(this.$store.state.trajects.trajects==""){
         return false

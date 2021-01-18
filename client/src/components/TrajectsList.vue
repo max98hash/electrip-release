@@ -22,7 +22,7 @@
                                 {{ Math.round(traject.distance * 0.01) / 10 || 'Not set' }} km
                                 </v-col>
                                 <v-col cols="3">
-                                Charges: {{ traject.stations || 'Not set' }}
+                                Charges: {{ traject.stations.length || 'Not set' }}
                                 </v-col>
                                 
                                 <v-col cols="4">
@@ -81,12 +81,12 @@
                         no-gutters
                         class="pt-3"
                         >
-                        <v-col cols="12" md="4" class="pb-2">
+                        <v-col cols="12" md="4" class="pb-2" v-if="!getViewtraject">
                             <v-btn
                                 depressed
                                 color="primary"
                                 :id="traject._id"
-                                @click="showButton($event)"
+                                @click="viewTraject($event)"
                             >
                             <v-icon
                                 right
@@ -97,6 +97,24 @@
                             </v-icon>
 
                                 View traject
+                            </v-btn>
+                        </v-col>
+                        <v-col cols="12" md="4" class="pb-2" v-else>
+                            <v-btn
+                                depressed
+                                color="purple"
+                                :id="traject._id"
+                                @click="hideTraject()"
+                            >
+                            <v-icon
+                                right
+                                dark
+                                class="pr-6"
+                            >
+                                mdi-eye-off
+                            </v-icon>
+
+                                Hide Traject
                             </v-btn>
                         </v-col>
 
@@ -117,7 +135,7 @@
                                 Find charging stations
                             </v-btn>
                         </v-col>
-                        <v-col cols="3" md="3">
+                        <v-col cols="12" md="2">
                             <v-btn
                                 depressed
                                 color="red"
@@ -164,9 +182,9 @@ export default {
       date: null,
       trajects: this.$store.state.trajects.trajects,
     }},
-    computed: mapGetters(['getCarName','getTrajects','getUserId','getAllTrajects']),
+    computed: mapGetters(['getCarName','getTrajects','getUserId','getAllTrajects','getViewtraject']),
     methods: {
-        ...mapMutations(['setCarName','setAllTrajectsToTrue']),
+        ...mapMutations(['setCarName','setAllTrajectsToTrue','setViewTrajectToFalse','setDisplayChargingFalse']),
         ...mapActions(['fetchTrajects','addtraject','filterSelectedTrajects','deleteTraject']),
         showButton(event){
             console.log(event.currentTarget.id)
@@ -183,6 +201,14 @@ export default {
         },
         displayCharging(event){
             busMap.$emit('displayCharging',event.currentTarget.id);
+        },
+        viewTraject(event){
+            busMap.$emit('showTraject',event.currentTarget.id);
+        },
+        hideTraject(){
+            this.setDisplayChargingFalse();
+            this.setViewTrajectToFalse();
+            console.log("hide traject")
         }
     },
 }

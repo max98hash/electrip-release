@@ -35,10 +35,19 @@ exports.createTraject = (req, res, next) => {
 		.catch(error => res.status(400).json({ error }));
 }
 
-/*exports.modifyCar = (req, res, next) => {
-	Car.findByIdAndUpdate(req.params.id,
-		{ brand: req.body.brand, model: req.body.model,  years: req.body.years, matriculationNbr: req.body.matriculationNbr, 
-        autonomy: req.body.autonomy}, {new: true}, 
+exports.modifyTraject = (req, res, next) => {
+    Traject.findByIdAndUpdate(req.params.id,{
+        name: req.body.name,
+        startCoord: req.body.startCoord,
+        startName: req.body.startName,
+        endCoord: req.body.endCoord,
+        endName: req.body.endName,
+        userId: req.body.userId,
+        distance: req.body.distance,
+        date : req.body.date,
+        carId: req.body.carId,
+        carName: req.body.carName,
+        stations: req.body.stations},
         function (err, result) {
             if (err) 
                 return res.status(400).json(err);
@@ -46,7 +55,7 @@ exports.createTraject = (req, res, next) => {
                 return res.status(201).json(result);
         }
     );
-}*/;
+};
 
 exports.deleteTraject = (req, res, next) => {
     Traject.findByIdAndDelete(req.params.id, (err, result) => {

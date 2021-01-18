@@ -18,14 +18,15 @@ export default {
       accessToken: 'pk.eyJ1IjoibWF4aGFzaCIsImEiOiJja2h5dXRoajAwOGpnMnlvaDh1bTEwMDY4In0.k8O0vTEqjd0t6WHOHiS_8A',
     };
   },
-  computed: mapGetters(['getOrigin','getMapCharging','getMarkers','getMarkersCharging','getClickStation']),
+  computed: mapGetters(['getOrigin','getMapCharging','getMarkers','getMarkersCharging','getClickStation','getDisplayCharging','getViewtraject']),
   methods: {
-    ...mapMutations(['setOrigin','setDisplayChargingTrue','setMap','setMarkers','setMarkersCharging','addOrRemoveStation','setPickStationToTrue','setClickStationInvert']),
+    ...mapMutations(['setOrigin','setDisplayChargingTrue','setMap','setMarkers','setMarkersCharging','addOrRemoveStation','setPickStationToTrue','setClickStationInvert','setTrajectInModification','setViewTrajectToTrue','setViewTrajectToFalse']),
     ...mapActions(['fetchTrajects']),
     async getTrajectGEOJSON(trajectId){
         const trajectBD = await axios.get('http://localhost:5555/trajects/'+trajectId);
         let startCoord = trajectBD.data.startCoord;
         let endCoord = trajectBD.data.endCoord;
+        this.setTrajectInModification(trajectBD.data._id);
         const url = 'https://api.mapbox.com/directions/v5/'+
             'mapbox/driving/'+
             startCoord[0]+','+startCoord[1]+';'+endCoord[0]+','+endCoord[1]+'?'+
@@ -160,18 +161,7 @@ export default {
 
         let map = this.getMapCharging;
 
-        if (map.getLayer('clusters')){
-            map.removeLayer('clusters');
-        }
-        if(map.getLayer('cluster-count')){
-            map.removeLayer('cluster-count');
-        }
-        if(map.getLayer('unclustered-point')){
-            map.removeLayer('unclustered-point');
-        }
-        if (map.getSource('stations')) {
-            map.removeSource('stations');
-        }
+        this.removeClusterLayer()
 
         map.addSource('stations', {
             type: 'geojson',
@@ -278,30 +268,27 @@ export default {
         });
 
     },
-    async displayLayout(coordCharging,geometry,coordinates){
+    displayLayout(coordCharging,geometry,coordinates){
 
-        var markers = {
-            type: 'FeatureCollection',
-            features: []
-        }
-        for(const index in coordCharging){
-            markers.features.push({
-                type: 'Feature',
-                geometry: {
-                    type: 'Point',
-                    coordinates: coordCharging[index]
-                }
-            })
+        if(!this.getViewtraject){
+            var markers = {
+                type: 'FeatureCollection',
+                features: []
+            }
+            for(const index in coordCharging){
+                markers.features.push({
+                    type: 'Feature',
+                    geometry: {
+                        type: 'Point',
+                        coordinates: coordCharging[index]
+                    }
+                })
+            }
         }
 
         let map = this.getMapCharging;
 
-        if (map.getLayer('LineString')) {
-            map.removeLayer('LineString');
-        }
-        if (map.getSource('LineString')) {
-            map.removeSource('LineString');
-        }
+        this.removeLineLayer()
 
         map.addSource('LineString', {
             'type': 'geojson',
@@ -337,7 +324,11 @@ export default {
             padding: 20
         });
 
-        this.displayMarkers(markers)
+        if(this.getViewtraject){
+            this.displayMarkersChargingIcon(coordCharging)
+        }else{
+            this.displayMarkers(markers)
+        }
     },
     displayMarkers(markers){
 
@@ -362,6 +353,93 @@ export default {
 
         this.setMarkers(newMarkers);
 
+    },
+    displayMarkersChargingIcon(stations){
+        var markers = {
+            type: 'FeatureCollection',
+            features: []
+        }
+        stations.forEach(function(station){
+            markers.features.push({
+                type: 'Feature',
+                geometry: {
+                    type: 'Point',
+                    coordinates: station.coordinates
+                }
+            })
+        })
+
+        let map = this.getMapCharging;
+
+        let newMarkers = []
+
+        markers.features.forEach(function(marker) {
+
+            // create a HTML element for each feature
+            var el = document.createElement('div');
+            el.className = 'marker';
+
+            // make a marker for each feature and add to the map
+            let markerMapbox = new mapboxgl.Marker(el)
+                .setLngLat(marker.geometry.coordinates)
+                .addTo(map);
+
+            newMarkers.push(markerMapbox)
+        
+        });
+
+        this.setMarkers(newMarkers);
+    },
+    removeClusterLayer(){
+        let map = this.getMapCharging;
+
+        if (map.getLayer('clusters')){
+            map.removeLayer('clusters');
+        }
+        if(map.getLayer('cluster-count')){
+            map.removeLayer('cluster-count');
+        }
+        if(map.getLayer('unclustered-point')){
+            map.removeLayer('unclustered-point');
+        }
+        if (map.getSource('stations')) {
+            map.removeSource('stations');
+        }
+    },
+    removeLineLayer(){
+        let map = this.getMapCharging;
+        
+        if (map.getLayer('LineString')) {
+            map.removeLayer('LineString');
+        }
+        if (map.getSource('LineString')) {
+            map.removeSource('LineString');
+        }
+
+        this.resetMarkers();
+    },
+    async showTraject(trajectId){
+        const traject = await axios.get('http://localhost:5555/trajects/'+trajectId);
+        let stations = traject.data.stations;
+        /*traject.data.stations.forEach(function(station){
+            stations.push(station)
+        })*/
+
+        let coordinates = traject.data.startCoord[0]+','+traject.data.startCoord[1]+';'
+        stations.forEach(function(station){
+            coordinates = coordinates+station.coordinates[0]+','+station.coordinates[1]+';'
+        })
+        coordinates = coordinates+traject.data.endCoord[0]+','+traject.data.endCoord[1]
+
+        console.log(coordinates);
+
+        const url = 'https://api.mapbox.com/directions/v5/'+
+            'mapbox/driving/'+
+            coordinates+'?'+
+            'geometries=geojson&'+
+            'access_token=pk.eyJ1IjoibWF4aGFzaCIsImEiOiJja2h5dXRoajAwOGpnMnlvaDh1bTEwMDY4In0.k8O0vTEqjd0t6WHOHiS_8A'
+        const trajectMapbox = await axios.get(url);
+        this.displayLayout(stations,trajectMapbox.data.routes[0].geometry,trajectMapbox.data.routes[0].geometry.coordinates);
     }
 
   },
@@ -403,6 +481,11 @@ export default {
            console.log("Station cliquée")
             this.addOrRemoveStation(station); 
         }
+    })
+    busMap.$on('showTraject' ,(idTraject) => {
+        this.setDisplayChargingTrue();
+        this.setViewTrajectToTrue();
+        this.showTraject(idTraject);
     })
   }
 };

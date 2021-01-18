@@ -100,7 +100,7 @@
 </template>
 
 <script>
-import {mapGetters, mapMutations} from 'vuex';
+import {mapGetters, mapMutations, mapActions} from 'vuex';
 
 export default {
     name: "StationsPicker",
@@ -108,12 +108,14 @@ export default {
         return {
             stations: this.$store.state.trajects.trajects,
     }},
-    computed: mapGetters(['getStations']),
+    computed: mapGetters(['getStations','getTrajectInModification','getUserId']),
     methods: {
+        ...mapActions(['addStationsToTraject','fetchTrajects']),
         ...mapMutations(['setPickStationToFalse']),
-        validateStations(){
+        async validateStations(){
             console.log("Stations validated");
-            this.setPickStationToFalse();
+            await this.addStationsToTraject(this.getStations);
+            return this.fetchTrajects(this.getUserId);
         }
     }
     

@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 const state =  {
     displayCharging: true,
     map: null,
@@ -6,6 +8,8 @@ const state =  {
     stations: [],
     pickStation: false,
     clickStation: false,
+    trajectInModification: null,
+    viewTraject: false,
 }
 
 const getters = {
@@ -16,10 +20,28 @@ const getters = {
     getStations: state => state.stations,
     getPickStation: state => state.pickStation,
     getClickStation: state => state.clickStation,
+    getTrajectInModification: state => state.trajectInModification,
+    getViewtraject: state => state.viewTraject,
+    getDisplayATraject: state => state.viewTraject || state.displayCharging,
 }
 
 const actions = {
-
+    async addStationsToTraject({commit},stations){
+        const traject = await axios.get('http://localhost:5555/trajects/'+state.trajectInModification)
+        console.log("Trajet à modifier : ")
+        console.log(traject)
+        let newStations = [];
+        for (let index = 0; index < stations.length; index++) {
+            newStations.push(stations[index])
+        }
+        traject.data.stations = newStations;
+        console.log("Trajet modifié : ")
+        console.log(traject)
+        const updatedTraject = await axios.put('http://localhost:5555/trajects/'+state.trajectInModification,traject.data);
+        console.log("Retour de la BD : ")
+        console.log(updatedTraject);
+        commit('trajectUpdated');
+    }
 }
 
 const mutations = {
@@ -49,6 +71,18 @@ const mutations = {
     setPickStationToTrue: state => state.pickStation = true,
     setPickStationToFalse: state => state.pickStation = false,
     setClickStationInvert: state => state.clickStation = !state.clickStation,
+    setTrajectInModification: (state,trajectId) => state.trajectInModification = trajectId,
+    trajectUpdated: (state) => {
+        state.pickStation = false;
+        state.displayCharging = false;
+        state.stations = [];
+    },
+    setViewTrajectToTrue: state => state.viewTraject = true,
+    setViewTrajectToFalse: state => {
+        state.viewTraject = false
+        console.log("View traject : "+state.viewTraject)
+        console.log("View charging : "+state.displayCharging)
+    }
 }
 
 export default {

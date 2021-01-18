@@ -8,7 +8,7 @@ const trajects = require('../controllers/trajects');
 router.get('/:id', trajects.getTraject);
 router.get('/user/:userId', trajects.getTrajects);
 router.post('/create', trajects.createTraject);
-//router.put('/:id', cars.modifyCar);
+router.put('/:id', trajects.modifyTraject);
 router.delete('/:id', trajects.deleteTraject);
 
 router.get('/user/:userId/:dateBeg/:dateEnd', trajects.getTrajectsBetweenDates);

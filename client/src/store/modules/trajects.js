@@ -137,7 +137,7 @@ const actions = {
             date: state.date,
             carId: state.carId,
             carName: state.carName,
-            _id: "45zEFcae5fzf5efv86"
+            stations: [],
             //coordinates: infos.data.routes[0].geometry.coordinates,
         }
         console.log(payload);

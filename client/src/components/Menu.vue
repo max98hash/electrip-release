@@ -63,9 +63,6 @@ export default {
         overlay: false,
         items: [
           { title: 'Home', icon: 'mdi-home', path: '/' },
-          { title: 'Cars', icon: 'mdi-car', path: '/cars'  },
-          { title: 'Explore', icon: 'mdi-compass', path: '/explore'  },
-          { title: 'Share', icon: 'mdi-account-group', path: '/share'  },
         ],
     }),
     computed: mapGetters(['getLogged','getDisplayCharging']),

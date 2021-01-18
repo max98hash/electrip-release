@@ -11,6 +11,7 @@ const trajectSchema = mongoose.Schema({
   date : { type: String, required: true },
   carId: {type: String, required: true},
   carName: {type: String, required: true},
+  stations: {type: Array, required: false},
 });
 
 module.exports = mongoose.model('Traject', trajectSchema);
