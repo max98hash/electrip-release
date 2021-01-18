@@ -21,6 +21,9 @@
           <v-col v-if="this.$store.state.trajects.picker" cols="12" lg="7" class="mt-2">
             <TrajectPicker/>
           </v-col>
+          <v-col v-else-if="this.$store.state.map.pickStation" cols="12" lg="7" >
+            <StationPicker/>
+          </v-col>
           <v-col v-else-if="this.$store.state.trajects.trajectsButFiltered" cols="12" lg="7" >
             <CarsTrajects/>
           </v-col>
@@ -43,6 +46,7 @@ import NoTrajects from '../components/NoTrajects';
 import TrajectPicker from '../components/TrajectPicker';
 import CarsTrajects from '../components/CarsTrajects';
 import MapCharging from  '../components/MapCharging';
+import StationPicker from '../components/StationsPicker';
 
 export default {
   name: 'Home',
@@ -54,6 +58,7 @@ export default {
     NoTrajects,
     TrajectPicker,
     MapCharging,
+    StationPicker,
   },
   methods: {
     trajectsIsNull(){

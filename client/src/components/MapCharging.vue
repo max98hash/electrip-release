@@ -18,9 +18,9 @@ export default {
       accessToken: 'pk.eyJ1IjoibWF4aGFzaCIsImEiOiJja2h5dXRoajAwOGpnMnlvaDh1bTEwMDY4In0.k8O0vTEqjd0t6WHOHiS_8A',
     };
   },
-  computed: mapGetters(['getOrigin','getMapCharging','getMarkers','getMarkersCharging']),
+  computed: mapGetters(['getOrigin','getMapCharging','getMarkers','getMarkersCharging','getClickStation']),
   methods: {
-    ...mapMutations(['setOrigin','setDisplayChargingTrue','setMap','setMarkers','setMarkersCharging']),
+    ...mapMutations(['setOrigin','setDisplayChargingTrue','setMap','setMarkers','setMarkersCharging','addOrRemoveStation','setPickStationToTrue','setClickStationInvert']),
     ...mapActions(['fetchTrajects']),
     async getTrajectGEOJSON(trajectId){
         const trajectBD = await axios.get('http://localhost:5555/trajects/'+trajectId);
@@ -97,18 +97,13 @@ export default {
 
         const coordCharging = this.getChargingCoordinates(nbPoints,distance,car.data.autonomy,mapboxTraject.data.routes[0].geometry.coordinates)
 
-        console.log('coordcharging')
-        console.log(coordCharging)
-
         this.resetChargingMarkers();
         this.resetMarkers();
 
         await this.displayLayout(coordCharging,mapboxTraject.data.routes[0].geometry,mapboxTraject.data.routes[0].geometry.coordinates)
         const geojson = await this.searchChargingStations(coordCharging);
-        console.log("stations before display : ")
-        console.log(geojson)
-        //this.displayMarkersCharging(geojson);
-        this.displayerMarkersChargingClusterVersion(geojson)
+        this.displayerMarkersChargingClusterVersion(geojson);
+        this.setPickStationToTrue();
 
     },
     async searchChargingStations(coordCharging){
@@ -161,48 +156,21 @@ export default {
 
 
     },
-    async displayMarkersCharging(geojson){
-        let map = this.getMapCharging;
-
-        let newMarkersCharging = []
-
-        geojson.features.forEach(function(marker) {
-
-            // create a HTML element for each feature
-            var el = document.createElement('div');
-            el.className = 'marker';
-
-            // make a marker for each feature and add to the map
-            let markerCharging = new mapboxgl.Marker(el)
-                .setLngLat(marker.geometry.coordinates)
-                .setPopup(new mapboxgl.Popup({ offset: 25 }) // add popups
-                    .setHTML('<h3>' + marker.properties.title + '</h3><p>' + marker.properties.access + '</p><p>' + marker.properties.address + '</p><p>' + marker.properties.comments + '</p>'))
-                .addTo(map);
-
-            newMarkersCharging.push(markerCharging);
-        });
-
-        this.setMarkersCharging(newMarkersCharging)
-    },
     async displayerMarkersChargingClusterVersion(stations){
 
         let map = this.getMapCharging;
 
         if (map.getLayer('clusters')){
             map.removeLayer('clusters');
-            console.log("Layer Removed")
         }
         if(map.getLayer('cluster-count')){
             map.removeLayer('cluster-count');
-            console.log("Layer Removed")
         }
         if(map.getLayer('unclustered-point')){
             map.removeLayer('unclustered-point');
-            console.log("Layer Removed")
         }
         if (map.getSource('stations')) {
             map.removeSource('stations');
-            console.log("Source Removed")
         }
 
         map.addSource('stations', {
@@ -274,7 +242,7 @@ export default {
                 'circle-stroke-width': 1,
                 'circle-stroke-color': '#fff'
             }
-});
+        });
 
         // When a click event occurs on a feature in
         // the unclustered-point layer, open a popup at
@@ -292,7 +260,9 @@ export default {
 
             let properties = e.features[0].properties
 
-            console.log("Lat : "+e.lngLat.lat+" Long : "+e.lngLat.lng)
+            properties['coordinates']=coordinates;
+
+            busMap.$emit('station',properties);
             
             new mapboxgl.Popup()
                 .setLngLat(coordinates)
@@ -328,11 +298,9 @@ export default {
 
         if (map.getLayer('LineString')) {
             map.removeLayer('LineString');
-            console.log("Layer Removed")
         }
         if (map.getSource('LineString')) {
             map.removeSource('LineString');
-            console.log("Source Removed")
         }
 
         map.addSource('LineString', {
@@ -428,6 +396,13 @@ export default {
     busMap.$on('displayCharging' ,(idTraject) => {
         this.setDisplayChargingTrue();
         this.displayCharging(idTraject);
+    })
+    busMap.$on('station' ,(station) => {
+        this.setClickStationInvert()
+        if(this.getClickStation){
+           console.log("Station cliquée")
+            this.addOrRemoveStation(station); 
+        }
     })
   }
 };
