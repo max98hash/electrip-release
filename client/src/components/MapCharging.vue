@@ -8,6 +8,7 @@ import mapboxgl from "mapbox-gl";
 import { mapGetters, mapMutations, mapActions } from 'vuex';
 import { busMap } from '../main';
 import axios from 'axios';
+//import $ from 'jquery';
 //import map from '../store/modules/map';
 
 export default {
@@ -17,9 +18,9 @@ export default {
       accessToken: 'pk.eyJ1IjoibWF4aGFzaCIsImEiOiJja2h5dXRoajAwOGpnMnlvaDh1bTEwMDY4In0.k8O0vTEqjd0t6WHOHiS_8A',
     };
   },
-  computed: mapGetters(['getOrigin','getMapCharging']),
+  computed: mapGetters(['getOrigin','getMapCharging','getMarkers','getMarkersCharging']),
   methods: {
-    ...mapMutations(['setOrigin','setDisplayChargingTrue','setMap']),
+    ...mapMutations(['setOrigin','setDisplayChargingTrue','setMap','setMarkers','setMarkersCharging']),
     ...mapActions(['fetchTrajects']),
     async getTrajectGEOJSON(trajectId){
         const trajectBD = await axios.get('http://localhost:5555/trajects/'+trajectId);
@@ -76,6 +77,18 @@ export default {
 
         return coordCharging;
     },
+    resetChargingMarkers(){
+        let oldMarkersCharging = this.getMarkersCharging;
+        oldMarkersCharging.forEach(function(marker){
+            marker.remove()
+        })
+    },
+    resetMarkers(){
+        let oldMarkers = this.getMarkers;
+        oldMarkers.forEach(function(marker){
+            marker.remove()
+        })
+    },
     async displayCharging(trajectId){
         const mapboxTraject = await this.getTrajectGEOJSON(trajectId);
         const distance = Math.round((mapboxTraject.data.routes[0].distance)*0.001)
@@ -87,10 +100,79 @@ export default {
         console.log('coordcharging')
         console.log(coordCharging)
 
-        this.displayLayout(coordCharging,mapboxTraject.data.routes[0].geometry,mapboxTraject.data.routes[0].geometry.coordinates)
+        this.resetChargingMarkers();
+        this.resetMarkers();
+
+        await this.displayLayout(coordCharging,mapboxTraject.data.routes[0].geometry,mapboxTraject.data.routes[0].geometry.coordinates)
+        const geojson = await this.searchChargingStations(coordCharging);
+        console.log("stations before display : ")
+        console.log(geojson)
+        this.displayMarkersCharging(geojson);
 
     },
-    displayLayout(coordCharging,geometry,coordinates){
+    async searchChargingStations(coordCharging){
+
+        var geojson = {
+            type: 'FeatureCollection',
+            features: []
+        };
+
+        for (let index = 0; index < coordCharging.length; index++) {
+
+            const chargePoint = await axios.get('https://api.openchargemap.io/v3/poi/?output=json&latitude='+coordCharging[index][1]+'&longitude='+coordCharging[index][0]+'&distance=10&distanceunit=KM&compact=true')
+
+            chargePoint.data.forEach(function(station){
+                const address = station.AddressInfo.AddressLine1
+                const access = station.AddressInfo.AccessComments
+                const title = station.AddressInfo.Title
+                const lat = station.AddressInfo.Latitude
+                const long = station.AddressInfo.Longitude
+                const comments = station.GeneralComments
+                geojson.features.push({
+                    type: 'Feature',
+                    geometry: {
+                        type: 'Point',
+                        coordinates: [long,lat]
+                    },
+                    properties: {
+                        title,
+                        access,
+                        address,
+                        comments
+                    }
+                })
+            })
+            
+        }
+
+        return geojson;
+
+    },
+    async displayMarkersCharging(geojson){
+        let map = this.getMapCharging;
+
+        let newMarkersCharging = []
+
+        geojson.features.forEach(function(marker) {
+
+            // create a HTML element for each feature
+            var el = document.createElement('div');
+            el.className = 'marker';
+
+            // make a marker for each feature and add to the map
+            let markerCharging = new mapboxgl.Marker(el)
+                .setLngLat(marker.geometry.coordinates)
+                .setPopup(new mapboxgl.Popup({ offset: 25 }) // add popups
+                    .setHTML('<h3>' + marker.properties.title + '</h3><p>' + marker.properties.access + '</p><p>' + marker.properties.address + '</p><p>' + marker.properties.comments + '</p>'))
+                .addTo(map);
+
+            newMarkersCharging.push(markerCharging);
+        });
+
+        this.setMarkersCharging(newMarkersCharging)
+    },
+    async displayLayout(coordCharging,geometry,coordinates){
+
         var markers = {
             type: 'FeatureCollection',
             features: []
@@ -153,18 +235,28 @@ export default {
         this.displayMarkers(markers)
     },
     displayMarkers(markers){
-            let map = this.getMapCharging;
-            markers.features.forEach(function(marker) {
+
+        let map = this.getMapCharging;
+
+        let newMarkers = []
+
+        markers.features.forEach(function(marker) {
 
             // create a HTML element for each feature
             var el = document.createElement('div');
             el.className = 'marker';
 
             // make a marker for each feature and add to the map
-            new mapboxgl.Marker()
+            let markerMapbox = new mapboxgl.Marker()
                 .setLngLat(marker.geometry.coordinates)
                 .addTo(map);
+
+            newMarkers.push(markerMapbox)
+        
         });
+
+        this.setMarkers(newMarkers);
+
     }
 
   },
