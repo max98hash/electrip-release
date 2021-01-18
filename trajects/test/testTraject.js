@@ -10,11 +10,16 @@ let should = chai.should();
 chai.use(chaiHttp);
 
 let trajectExample = {
-  brand: "Koenigsegg",
-  model: "Regera",
-  years: 2,
-  matriculationNbr: "LYF2EZ",
-  autonomy: 200
+    name: "Test",
+    startCoord: [1, 2],
+    startName: "Bordeaux",
+    endCoord: [2, 3],
+    endName: "Mars",
+    userId: "123456",
+    distance: 20,
+    date : "2021-01-20T21:23:58.933Z",
+    carId: "123555",
+    carName: "Tesla"
 }
 
 describe('Trajects', () => {
@@ -35,11 +40,16 @@ describe('Trajects', () => {
                 .end((err, res) => {
                     res.should.have.status(201);
                     res.body.should.be.a('object');
-                    res.body.should.have.property('brand');
-                    res.body.should.have.property('model');
-                    res.body.should.have.property('years');
-                    res.body.should.have.property('matriculationNbr');
-                    res.body.should.have.property('autonomy');
+                    res.body.should.have.property('name');
+                    res.body.should.have.property('startCoord');
+                    res.body.should.have.property('startName');
+                    res.body.should.have.property('endCoord');
+                    res.body.should.have.property('endName');
+                    res.body.should.have.property('userId');
+                    res.body.should.have.property('distance');
+                    res.body.should.have.property('date');
+                    res.body.should.have.property('carId');
+                    res.body.should.have.property('carName');
                     res.body.should.have.property('_id').eql(traject.id);
                     done();
                 });
@@ -57,11 +67,16 @@ describe('Trajects', () => {
                 .end((err, res) => {
                     res.should.have.status(201);
                     res.body.should.be.a('object');
-                    res.body.should.have.property('brand');
-                    res.body.should.have.property('model');
-                    res.body.should.have.property('years');
-                    res.body.should.have.property('matriculationNbr');
-                    res.body.should.have.property('autonomy');
+                    res.body.should.have.property('name');
+                    res.body.should.have.property('startCoord');
+                    res.body.should.have.property('startName');
+                    res.body.should.have.property('endCoord');
+                    res.body.should.have.property('endName');
+                    res.body.should.have.property('userId');
+                    res.body.should.have.property('distance');
+                    res.body.should.have.property('date');
+                    res.body.should.have.property('carId');
+                    res.body.should.have.property('carName');
                     done();
                 });
         });
@@ -76,17 +91,22 @@ describe('Trajects', () => {
                 chai.request(server)
                     .put('/trajects/' + traject.id)
                     .send({
-                        brand: "Fiat", model: "Multipla GT V12 Electrique", years: "0", matriculationNbr: "SP33D",
-                        autonomy: "2000"
+                        name: "Fiat", startCoord: "Multipla GT V12 Electrique", startName: "0", endCoord: "SP33D",
+                        endCoord: "2000", userId: "123456", distance: 20, date : "2021-01-20T21:23:58.933Z", carId: "123555", carName: "Tesla"
                     })
                     .end((err, res) => {
                         res.should.have.status(201);
                         res.body.should.be.a('object');
-                        res.body.traject.should.have.property('brand').eql("Fiat");
-                        res.body.traject.should.have.property('model').eql("Multipla GT V12 Electrique");
-                        res.body.traject.should.have.property('years').eql("0");
-                        res.body.traject.should.have.property('matriculationNbr').eql("SP33D");
-                        res.body.traject.should.have.property('autonomy').eql("2000");
+                        res.body.should.have.property('name').eql("Test");
+                        res.body.should.have.property('startCoord').eql([1, 2]);
+                        res.body.should.have.property('startName').eql("Bordeaux");
+                        res.body.should.have.property('endCoord').eql([2, 3]);
+                        res.body.should.have.property('endName').eql("Mars");
+                        res.body.should.have.property('userId').eql("123456");
+                        res.body.should.have.property('distance').eql(20);
+                        res.body.should.have.property('date').eql("2021-01-20T21:23:58.933Z");
+                        res.body.should.have.property('carId').eql("123555");
+                        res.body.should.have.property('carName').eql("Tesla");
                         done();
                     });
             });
