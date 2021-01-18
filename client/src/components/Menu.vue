@@ -24,16 +24,6 @@
                 <v-list-item-title>{{ item.title }}</v-list-item-title>
                 </v-list-item-content>
             </v-list-item>
-            <v-list-item v-if="this.$store.state.map.displayCharging" v-on:click="setDisplayChargingFalse" link>
-                <v-list-item-content>
-                    <v-list-item-title>Hide charging</v-list-item-title>
-                </v-list-item-content>
-            </v-list-item>
-            <v-list-item v-if="!this.$store.state.map.displayCharging" v-on:click="setDisplayChargingTrue" link>
-                <v-list-item-content>
-                    <v-list-item-title>Show Charging</v-list-item-title>
-                </v-list-item-content>
-            </v-list-item>
             <v-list-item v-if="!getLogged" v-on:click="setLogin" link>
                 <v-list-item-content>
                     <v-list-item-title>Login</v-list-item-title>
