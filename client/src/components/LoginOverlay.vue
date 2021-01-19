@@ -74,7 +74,7 @@ export default {
   }),
   computed: mapGetters(['getOverlayLogin','getLoginOrRegister','getUserId','getToken']),
   methods: {
-    ...mapActions(['login','register','fetchCars','fetchTrajects','filterSelectedTrajects']),
+    ...mapActions(['login','register','fetchCars','fetchTrajects','filterSelectedTrajects','fetchEvents']),
     ...mapMutations(['invertOverlayLogin','invertLoginOrRegister','setDisplayChargingFalse']),
     async submit(){
         if(this.$refs.form.validate()){
@@ -84,6 +84,7 @@ export default {
                 this.setDisplayChargingFalse()
                 await this.fetchCars(this.getToken);
                 await this.fetchTrajects(this.getToken);
+                await this.fetchEvents(this.getToken)
                 this.filterSelectedTrajects();
             }else{
                 console.log("register");

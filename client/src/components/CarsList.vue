@@ -36,7 +36,7 @@
       <v-divider></v-divider>
       <v-btn
           depressed
-          color="green"
+          color="primary"
           @click="setCreateCar"
           class="mt-2 mb-2"
       >

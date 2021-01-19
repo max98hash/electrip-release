@@ -29,6 +29,23 @@ const state = {
             carName: "Nissan Juke"
         },*/
     ],
+    events: [
+        {
+            name: "Vacances",
+            start: "2021-01-19",
+            end: "2021-01-26",
+            color: "orange",
+            timed: false,
+            category: "Famille"
+        },
+        {
+            name: "Rdv",
+            start: "2021-01-12",
+            color: "pink",
+            timed: false,
+            category: "Travail"
+        }
+    ],
     trajectsSelected: [],
     origin: null,
     destination: null,
@@ -46,6 +63,9 @@ const state = {
     endDate: null,
     allTrajects: false,
     trajectsButFiltered: true,
+    allEvents: false,
+    pickerEvents: false,
+    pickerEventStep: 1,
 };
 
 const getters = {
@@ -65,6 +85,10 @@ const getters = {
     getStartDate: state => state.startDate,
     getEndDate: state => state.endDate,
     getAllTrajects: state => state.allTrajects,
+    getEvents: state => state.events,
+    getAllEvents: state => state.getAllEvents,
+    getPickerEvents: state => state.pickerEvents,
+    getPickerEventStep: state => state.pickerEventStep,
 };
 
 const actions = {
@@ -77,6 +101,16 @@ const actions = {
         console.log("Traject deleted : ");
         console.log(response.data)
         commit('setAfterRemoveTraject',trajectId);
+    },
+    async deleteEvent({commit},{eventId, token}){
+        const response = await axios.delete('http://localhost:7777/activities/'+eventId,{
+            headers: {
+            'x-access-token': token
+            }
+        });
+        console.log("Event deleted : ");
+        console.log(response.data)
+        commit('setAfterRemoveEvent',eventId);
     },
     async fetchTrajects({commit},token){
         console.log("fetchTrajects")
@@ -154,8 +188,50 @@ const actions = {
         console.log(trajet);
         commit('newTraject',trajet.data);
     },
+    async fetchEvents({commit},token){
+        console.log('fetchEvents')
+        if(token!=null){
+            state.trajectsButFiltered=true;
+            const req = await axios.get('http://localhost:7777/activities/',{
+                headers: {
+                'x-access-token': token
+                }
+            });
+            if(state.allEvents){
+                req.data.sort(function custom_sort(event1, event2) {
+                    return new Date(event1.start).getTime() - new Date(event2.start).getTime();
+                });
+                commit('setEvents',req.data);
+            }else{
+                let newEvents = [];
+                if(state.startDate==state.endDate){
+                    newEvents = req.data.filter(event => event.start==state.startDate);
+                }else{
+                    newEvents = req.data.filter(event => new Date(event.start) >= new Date(state.startDate) && new Date(event.start) <= new Date(state.endDate));
+                }
+                newEvents.sort(function custom_sort(event1, event2) {
+                    return new Date(event1.start).getTime() - new Date(event2.start).getTime();
+                });
+                commit('setEvents',newEvents);
+            } 
+        }else{
+            state.trajectsButFiltered=false;
+        }
+    },
+    async addEvent({commit},{token,event}){
+        console.log("event")
+        console.log(event)
+        const returnedEvent = await axios.post('http://localhost:7777/activities/create',event,{
+            headers: {
+            'x-access-token': token
+            }
+        });
+        console.log(returnedEvent);
+        commit('newEvent',returnedEvent.data);
+    },
     filterSelectedTrajects({commit}){
         let filteredTrajects = [];
+        let filteredEvents = [];
         if(state.startDate==state.endDate){
             filteredTrajects = state.trajects
                 .filter(traject => traject.date==state.startDate)
@@ -164,6 +240,33 @@ const actions = {
                     start: state.startDate,
                     color: 'blue',
                 }})
+            filteredEvents = state.events
+                .filter(event => event.start==state.startDate)
+                .map(event => {
+                    let displayableEvent = {
+                        name: event.name,
+                        start: event.start,
+                    }
+                    if(event.end){
+                        displayableEvent['end']=event.end;
+                    }
+                    if(event.category=="Family"){
+                        displayableEvent['color']='orange'
+                    }
+                    else if(event.category=="Work"){
+                        displayableEvent['color']='grey'
+                    }
+                    else if(event.category=="Sport"){
+                        displayableEvent['color']='red'
+                    }
+                    else if(event.category=="Holidays"){
+                        displayableEvent['color']='green'
+                    }
+                    else if(event.category=="Other"){
+                        displayableEvent['color']='cyan'
+                    }
+                    return displayableEvent
+                })
         }else{
             let trajectsInBetween = state.trajects.filter(traject => new Date(traject.date) >= new Date(state.startDate) && new Date(traject.date) <= new Date(state.endDate))
             filteredTrajects = trajectsInBetween.map(traject => { return {
@@ -171,13 +274,54 @@ const actions = {
                     start: traject.date,
                     color: 'blue',
                 }})
+            let eventsInBetween = state.events.filter(event => new Date(event.start) >= new Date(state.startDate) && new Date(event.start) <= new Date(state.endDate))
+            filteredEvents = eventsInBetween.map(event => {
+                let displayableEvent = {
+                    name: event.name,
+                    start: event.start,
+                }
+                if(event.end){
+                    displayableEvent['end']=event.end;
+                }
+                if(event.category=="Family"){
+                    displayableEvent['color']='orange'
+                }
+                else if(event.category=="Work"){
+                    displayableEvent['color']='grey'
+                }
+                else if(event.category=="Sport"){
+                    displayableEvent['color']='red'
+                }
+                else if(event.category=="Holidays"){
+                    displayableEvent['color']='green'
+                }
+                else if(event.category=="Other"){
+                    displayableEvent['color']='cyan'
+                }
+                return displayableEvent
+            })
         }
-        commit('setTrajectsSelected',filteredTrajects);
+        /*filteredTrajects.push({
+            name: "Vacances",
+            start: "2021-01-19",
+            end: "2021-01-26",
+            color: "orange",
+            timed: false,
+        })
+        filteredTrajects.push({
+            name: "Rdv",
+            start: "2021-01-12",
+            color: "pink",
+            timed: false,
+        })*/
+        let toDisplay = filteredTrajects.concat(filteredEvents);
+        commit('setTrajectsSelected',toDisplay);
     },
 };
 
 const mutations = {
     setTrajects: (state, trajects) => state.trajects = trajects,
+    setEvents: (state, events) => state.events = events,
     setDestination: (state, destination) => state.destination = destination,
     setOrigin: (state, origin) => state.origin = origin,
     setDate: (state, date) => state.date = date,
@@ -219,6 +363,26 @@ const mutations = {
         temp = state.trajects.filter(traject => traject._id!=trajectId);
         state.trajects = temp;
     },
+    setAfterRemoveEvent: (state, eventId) => {
+        let temp = state.events;
+        temp = state.events.filter(event => event._id!=eventId);
+        state.events = temp;
+    },
+    setAllEventsToFalse: state => state.allEvents = false,
+    setAllEventsToTrue: state => state.allEvents = true,
+    invertEventPicker: state => state.pickerEvents = !state.pickerEvents,
+    minusEventPickerStep: state => state.pickerEventStep = state.pickerEventStep-1,
+    plusEventPickerStep: state => state.pickerEventStep = state.pickerEventStep+1,
+    initEventPickerStep: state => state.pickerEventStep = 1,
+    newEvent: (state, event) => {
+        let temp = state.events
+        temp.push(event);
+        let temp2 = temp.filter(event => new Date(event.start) >= new Date(state.startDate) && new Date(event.start) <= new Date(state.endDate))
+        temp2.sort(function custom_sort(event1, event2) {
+            return new Date(event1.start).getTime() - new Date(event2.start).getTime();
+        });
+        state.events = temp2;
+    }
 };
 
 export default {

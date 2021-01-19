@@ -73,7 +73,7 @@
           </v-menu>
         </v-toolbar>
       </v-sheet>
-      <v-sheet height="500">
+      <v-sheet height="550">
         <v-calendar
           ref="calendar"
           v-model="focus"
@@ -115,8 +115,8 @@ import { mapGetters, mapActions, mapMutations } from 'vuex';
     },
     computed: mapGetters(['getTrajectsSelected','getTrajects','getUserId','getToken']),
     methods: {
-      ...mapActions(['filterSelectedTrajects','fetchTrajects']),
-      ...mapMutations(['setStartDate','setEndDate','setAllTrajectsToFalse']),
+      ...mapActions(['filterSelectedTrajects','fetchTrajects','fetchEvents']),
+      ...mapMutations(['setStartDate','setEndDate','setAllTrajectsToFalse','setAllEventsToFalse']),
       viewDay ({ date }) {
         this.focus = date
         this.type = 'day'
@@ -138,10 +138,12 @@ import { mapGetters, mapActions, mapMutations } from 'vuex';
       },
       async updateRange ({ start, end }) {
         this.setAllTrajectsToFalse()
+        this.setAllEventsToFalse()
         this.focus = end.date
         this.setStartDate(start.date);
         this.setEndDate(end.date);
         await this.fetchTrajects(this.getToken);
+        await this.fetchEvents(this.getToken);
         this.filterSelectedTrajects();
       },
       rnd (a, b) {

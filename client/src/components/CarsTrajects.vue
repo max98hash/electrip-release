@@ -20,12 +20,21 @@
         </v-icon>
         Cars
       </v-tab>
+      <v-tab>
+        <v-icon left>
+          mdi-calendar
+        </v-icon>
+        Events
+      </v-tab>
 
       <v-tab-item>
         <TrajectsList/>
       </v-tab-item>
       <v-tab-item>
         <CarsList/>
+      </v-tab-item>
+      <v-tab-item>
+        <Events/>
       </v-tab-item>
     </v-tabs>
   </v-card>
@@ -34,12 +43,14 @@
 <script>
 import TrajectsList from './TrajectsList';
 import CarsList from './CarsList';
+import Events from './EventList';
 
 export default {
     name: "CarsTrajects",
     components: {
         TrajectsList,
         CarsList,
+        Events,
     }
     
 }

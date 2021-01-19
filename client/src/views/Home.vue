@@ -21,6 +21,9 @@
           <v-col v-if="this.$store.state.trajects.picker" cols="12" lg="7" class="mt-2">
             <TrajectPicker/>
           </v-col>
+          <v-col v-if="this.$store.state.trajects.pickerEvents" cols="12" lg="7" class="mt-2">
+            <EventPicker/>
+          </v-col>
           <v-col v-else-if="this.$store.state.map.pickStation" cols="12" lg="7" >
             <StationPicker/>
           </v-col>
@@ -47,6 +50,7 @@ import TrajectPicker from '../components/TrajectPicker';
 import CarsTrajects from '../components/CarsTrajects';
 import MapCharging from  '../components/MapCharging';
 import StationPicker from '../components/StationsPicker';
+import EventPicker from '../components/EventPicker';
 //import map from '../store/modules/map';
 
 export default {
@@ -60,6 +64,7 @@ export default {
     TrajectPicker,
     MapCharging,
     StationPicker,
+    EventPicker,
   },
   methods: {
     ...mapGetters(['getDisplayATraject']),
