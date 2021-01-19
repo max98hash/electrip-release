@@ -123,34 +123,45 @@ describe('Trajects', () => {
     /*
      * Test the /PUT/:id route
      */
-    /*describe('/PUT/:id Traject', () => {
+    describe('/PUT/:id Traject', () => {
         it('it should UPDATE a traject given the id', (done) => {
-
-            trajectExampleModel.save((err, traject) => {
+            var trajectExampleModelUpdate = new Traject({
+                name: "Test",
+                startCoord: [1, 2],
+                startName: "Bordeaux",
+                endCoord: [2, 3],
+                endName: "Mars",
+                userId: "123456",
+                distance: 20,
+                date : "2021-01-20T21:23:58.933Z",
+                carId: "123555",
+                carName: "Tesla"
+            });
+            trajectExampleModelUpdate.save((err, traject) => {
                 chai.request(server)
                     .put('/trajects/' + traject.id)
                     .send({
-                        name: "Fiat", startCoord: "Multipla GT V12 Electrique", startName: "0", endCoord: "SP33D",
-                        endCoord: "2000", userId: "123456", distance: 20, date : "2021-01-20T21:23:58.933Z", carId: "123555", carName: "Tesla"
+                        name: "Test", startCoord: [1, 2], startName: "Virtual", endCoord: [3, 4],
+                        endCoord: "Insanity", userId: "123456", distance: 20, date : "2021-01-20T21:23:58.933Z", carId: "123555", carName: "Alpine"
                     })
                     .end((err, res) => {
                         res.should.have.status(201);
                         res.body.should.be.a('object');
                         res.body.should.have.property('name').eql("Test");
                         res.body.should.have.property('startCoord').eql([1, 2]);
-                        res.body.should.have.property('startName').eql("Bordeaux");
-                        res.body.should.have.property('endCoord').eql([2, 3]);
-                        res.body.should.have.property('endName').eql("Mars");
+                        res.body.should.have.property('startName').eql("Virtual");
+                        res.body.should.have.property('endCoord').eql([3, 4]);
+                        res.body.should.have.property('endName').eql("Insanity");
                         res.body.should.have.property('userId').eql("123456");
                         res.body.should.have.property('distance').eql(20);
                         res.body.should.have.property('date').eql("2021-01-20T21:23:58.933Z");
                         res.body.should.have.property('carId').eql("123555");
-                        res.body.should.have.property('carName').eql("Tesla");
+                        res.body.should.have.property('carName').eql("Alpine");
                         done();
                     });
             });
         });
-    });*/
+    });
     /*
       * Test the /DELETE/:id route
       */

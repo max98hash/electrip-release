@@ -18,7 +18,6 @@ exports.getTrajectsBetweenDates = (req, res, next) => {
     let userId = req.params.userId;
     let dateBeg = Date.parse(req.params.dateBeg);
     let dateEnd = Date.parse(req.params.dateEnd);
-    var trajectsFinal = []
 	Traject.find({userId: userId})
     .then(trajects => res.status(200).json(trajects.filter(data => (Date.parse(data.date) > dateBeg) && (Date.parse(data.date) < dateEnd))))
     .catch(error => res.status(400).json({ error }));
