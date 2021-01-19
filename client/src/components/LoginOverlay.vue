@@ -72,7 +72,7 @@ export default {
           },
     }
   }),
-  computed: mapGetters(['getOverlayLogin','getLoginOrRegister','getUserId']),
+  computed: mapGetters(['getOverlayLogin','getLoginOrRegister','getUserId','getToken']),
   methods: {
     ...mapActions(['login','register','fetchCars','fetchTrajects','filterSelectedTrajects']),
     ...mapMutations(['invertOverlayLogin','invertLoginOrRegister','setDisplayChargingFalse']),
@@ -82,7 +82,7 @@ export default {
                 await this.login({email: this.email,password: this.password}); 
                 this.invertLoginOrRegister();
                 this.setDisplayChargingFalse()
-                await this.fetchCars(this.getUserId);
+                await this.fetchCars(this.getToken);
                 await this.fetchTrajects(this.getUserId);
                 this.filterSelectedTrajects();
             }else{

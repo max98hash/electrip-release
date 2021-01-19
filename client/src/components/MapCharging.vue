@@ -18,7 +18,7 @@ export default {
       accessToken: 'pk.eyJ1IjoibWF4aGFzaCIsImEiOiJja2h5dXRoajAwOGpnMnlvaDh1bTEwMDY4In0.k8O0vTEqjd0t6WHOHiS_8A',
     };
   },
-  computed: mapGetters(['getOrigin','getMapCharging','getMarkers','getMarkersCharging','getClickStation','getDisplayCharging','getViewtraject']),
+  computed: mapGetters(['getOrigin','getMapCharging','getMarkers','getMarkersCharging','getClickStation','getDisplayCharging','getViewtraject','getToken']),
   methods: {
     ...mapMutations(['setOrigin','setDisplayChargingTrue','setMap','setMarkers','setMarkersCharging','addOrRemoveStation','setPickStationToTrue','setClickStationInvert','setTrajectInModification','setViewTrajectToTrue','setViewTrajectToFalse']),
     ...mapActions(['fetchTrajects']),
@@ -37,7 +37,7 @@ export default {
         return trajectMapbox
     },
     async getCarFromBD(carId){
-        return await axios.get('http://localhost:3000/cars/'+carId)
+        return await axios.get('http://localhost:3000/cars/'+carId,{ headers : { 'x-access-token': this.getToken }})
     },
     rad(x){
         return x * Math.PI / 180;

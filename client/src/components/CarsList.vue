@@ -65,13 +65,13 @@ export default {
     components: {
         CarsForm,
     },
-    computed: mapGetters(['getCreateCar','getCars','getUserId']),
+    computed: mapGetters(['getCreateCar','getCars','getUserId','getToken']),
     methods: {
       ...mapMutations(['setCreateCar']),
       ...mapActions(['fetchCars']),
     },
     mounted(){
-      this.fetchCars(this.getUserId);
+      this.fetchCars(this.getToken);
     },
 }
 </script>

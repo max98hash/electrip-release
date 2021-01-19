@@ -52,7 +52,7 @@ export default {
   data: () => ({
     
   }),
-  computed: mapGetters(['getCarOverlay','getUserId','getCars','getCarName','getUserId']),
+  computed: mapGetters(['getCarOverlay','getCars','getCarName','getToken']),
   methods: {
     ...mapActions(['addtraject','fetchCars']),
     ...mapMutations(['invertCarOverlay','setCar','setCarName','plusPickerStep']),
@@ -66,7 +66,7 @@ export default {
     }
   },
   mounted(){
-      this.fetchCars(this.getUserId)
+      this.fetchCars(this.getToken)
   }
 }
 </script>

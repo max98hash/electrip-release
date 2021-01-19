@@ -110,7 +110,7 @@ import {mapMutations, mapActions, mapGetters} from 'vuex';
 
 export default {
   name: "CarsForm",
-  computed: mapGetters(['getUserId']),
+  computed: mapGetters(['getUserId','getToken']),
   data: () => ({ 
       brand: "",
       model: "",
@@ -126,12 +126,14 @@ export default {
       if(this.$refs.form.validate()){
         console.log("userId : "+this.getUserId)
         this.addCar({
-          brand: this.brand,
-          model: this.model,
-          years: this.years,
-          matriculationNbr: this.matriculationNbr,
-          autonomy: this.autonomy,
-          userId: this.getUserId
+          car: {
+            brand: this.brand,
+            model: this.model,
+            years: this.years,
+            matriculationNbr: this.matriculationNbr,
+            autonomy: this.autonomy,
+          },
+          token: this.getToken,
           });
         this.setCreateCar();
       }
