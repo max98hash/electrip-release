@@ -46,7 +46,7 @@ exports.modifyTraject = (req, res, next) => {
         date : req.body.date,
         carId: req.body.carId,
         carName: req.body.carName,
-        stations: req.body.stations},
+        stations: req.body.stations}, {new: true},
         function (err, result) {
             if (err) 
                 return res.status(400).json(err);

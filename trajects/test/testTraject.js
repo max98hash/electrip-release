@@ -142,7 +142,7 @@ describe('Trajects', () => {
                     .put('/trajects/' + traject.id)
                     .send({
                         name: "Test", startCoord: [1, 2], startName: "Virtual", endCoord: [3, 4],
-                        endCoord: "Insanity", userId: "123456", distance: 20, date : "2021-01-20T21:23:58.933Z", carId: "123555", carName: "Alpine"
+                        endName: "Insanity", userId: "123456", distance: 20, date : "2021-01-20T21:23:58.933Z", carId: "123555", carName: "Alpine"
                     })
                     .end((err, res) => {
                         res.should.have.status(201);
