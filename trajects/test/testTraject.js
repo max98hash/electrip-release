@@ -10,46 +10,6 @@ let should = chai.should();
 var expect = chai.expect;
 chai.use(chaiHttp);
 
-var trajectExample = {
-    name: "Test",
-    startCoord: [1, 2],
-    startName: "Bordeaux",
-    endCoord: [2, 3],
-    endName: "Mars",
-    userId: "123456",
-    distance: 20,
-    date : "2021-01-20T21:23:58.933Z",
-    carId: "123555",
-    carName: "Tesla"
-};
-
-var trajectExampleModel = new Traject({
-    name: "Test",
-    startCoord: [1, 2],
-    startName: "Bordeaux",
-    endCoord: [2, 3],
-    endName: "Mars",
-    userId: "123456",
-    distance: 20,
-    date : "2021-01-20T21:23:58.933Z",
-    carId: "123555",
-    carName: "Tesla"
-});
-
-var trajectExampleModel2 = new Traject({
-    name: "Test",
-    startCoord: [1, 2],
-    startName: "Bordeaux",
-    endCoord: [2, 3],
-    endName: "Mars",
-    userId: "123456",
-    distance: 20,
-    date : "2021-01-20T21:23:58.933Z",
-    carId: "123555",
-    carName: "Tesla"
-});
-
-
 describe('Trajects', () => {
     beforeEach((done) => { //Before each test we empty the database
         Traject.deleteMany({}, (err) => {
@@ -61,7 +21,19 @@ describe('Trajects', () => {
       */
     describe('/GET Traject', () => {
         it('it should GET a traject by the given id', (done) => {
-            trajectExampleModel.save((err, traject) => {
+            var trajectExampleModelGet = new Traject({
+                name: "Test",
+                startCoord: [1, 2],
+                startName: "Bordeaux",
+                endCoord: [2, 3],
+                endName: "Mars",
+                userId: "123456",
+                distance: 20,
+                date : "2021-01-20T21:23:58.933Z",
+                carId: "123555",
+                carName: "Tesla"
+            });
+            trajectExampleModelGet.save((err, traject) => {
                 chai.request(server)
                 .get('/trajects/' + traject.id)
                 .send(traject)
@@ -167,7 +139,19 @@ describe('Trajects', () => {
       */
     describe('/DELETE/:id Traject', () => {
         it('it should DELETE a traject given the id', (done) => {
-            trajectExampleModel2.save((err, traject) => {
+            var trajectExampleModelDelete = new Traject({
+                name: "Test",
+                startCoord: [1, 2],
+                startName: "Bordeaux",
+                endCoord: [2, 3],
+                endName: "Mars",
+                userId: "123456",
+                distance: 20,
+                date : "2021-01-20T21:23:58.933Z",
+                carId: "123555",
+                carName: "Tesla"
+            });
+            trajectExampleModelDelete.save((err, traject) => {
                 chai.request(server)
                     .del('/trajects/' + traject.id)
                     .end((err, res) => {
@@ -178,5 +162,49 @@ describe('Trajects', () => {
             });
         });
     });   
-
+    /*
+     * Test the /GET/user/:userId/:dateBeg/:dateEnd route
+     */
+    describe('/GET', () => {
+        it('it should GET all trajects between two given dates', (done) => {
+            var trajectExampleModelTwoDates = new Traject({
+                name: "Test",
+                startCoord: [1, 2],
+                startName: "Bordeaux",
+                endCoord: [2, 3],
+                endName: "Mars",
+                userId: "123456",
+                distance: 20,
+                date : "2021-01-20T21:23:58.933Z",
+                carId: "123555",
+                carName: "Tesla"
+            });
+            var trajectExampleModelTwoOutOfDates = new Traject({
+                name: "TestRetour",
+                startCoord: [2, 3],
+                startName: "Mars",
+                endCoord: [1, 2],
+                endName: "Bordeaux",
+                userId: "123456",
+                distance: 20,
+                date : "2021-01-30T21:23:58.933Z",
+                carId: "123555",
+                carName: "Tesla"
+            });
+            trajectExampleModelTwoOutOfDates.save();
+            trajectExampleModelTwoDates.save((err, traject) => {
+                chai.request(server)
+                .get('/trajects/user/' + traject.userId + "/2021-01-15T21:23:58.933Z" + "/2021-01-25T21:23:58.933Z")
+                .send(traject)
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    res.body.should.be.a('array');
+                    res.body.should.have.property('length', 1);
+                    res.body[0].should.have.property('name').eql("Test");
+                    res.body[0].should.have.property('_id').eql(traject.id);
+                    done();
+                });
+            });
+        });
+    });
 });
