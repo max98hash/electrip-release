@@ -47,7 +47,7 @@
 import { mapGetters, mapMutations, mapActions } from 'vuex';
 
 export default {
-  name: 'LoginOverlay',
+  name: 'TrajectOverlay',
   data: () => ({
     date: new Date().toISOString().substr(0, 10),
     menu: false,
@@ -62,10 +62,6 @@ export default {
         console.log(this.date)
         this.modal=false;
         this.plusPickerStep();
-        //this.addtraject(this.getUserId);
-        //this.invertCalendarOverlay();
-        //this.fetchCars(this.getUserId)
-        //this.invertCarOverlay();
     }
   },
 }

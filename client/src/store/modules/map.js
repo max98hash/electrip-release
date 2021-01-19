@@ -26,8 +26,12 @@ const getters = {
 }
 
 const actions = {
-    async addStationsToTraject({commit},stations){
-        const traject = await axios.get('http://localhost:5555/trajects/'+state.trajectInModification)
+    async addStationsToTraject({commit},{stations,token}){
+        const traject = await axios.get('http://localhost:5555/trajects/'+state.trajectInModification,{
+            headers: {
+            'x-access-token': token
+            }
+        })
         console.log("Trajet à modifier : ")
         console.log(traject)
         let newStations = [];
@@ -37,7 +41,11 @@ const actions = {
         traject.data.stations = newStations;
         console.log("Trajet modifié : ")
         console.log(traject)
-        const updatedTraject = await axios.put('http://localhost:5555/trajects/'+state.trajectInModification,traject.data);
+        const updatedTraject = await axios.put('http://localhost:5555/trajects/'+state.trajectInModification,traject.data,{
+            headers: {
+            'x-access-token': token
+            }
+        });
         console.log("Retour de la BD : ")
         console.log(updatedTraject);
         commit('trajectUpdated');

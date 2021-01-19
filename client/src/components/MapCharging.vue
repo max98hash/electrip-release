@@ -8,8 +8,6 @@ import mapboxgl from "mapbox-gl";
 import { mapGetters, mapMutations, mapActions } from 'vuex';
 import { busMap } from '../main';
 import axios from 'axios';
-//import $ from 'jquery';
-//import map from '../store/modules/map';
 
 export default {
   name: "BaseMap",
@@ -23,7 +21,11 @@ export default {
     ...mapMutations(['setOrigin','setDisplayChargingTrue','setMap','setMarkers','setMarkersCharging','addOrRemoveStation','setPickStationToTrue','setClickStationInvert','setTrajectInModification','setViewTrajectToTrue','setViewTrajectToFalse']),
     ...mapActions(['fetchTrajects']),
     async getTrajectGEOJSON(trajectId){
-        const trajectBD = await axios.get('http://localhost:5555/trajects/'+trajectId);
+        const trajectBD = await axios.get('http://localhost:5555/trajects/'+trajectId,{
+                headers: {
+                'x-access-token': this.getToken
+                }
+            });
         let startCoord = trajectBD.data.startCoord;
         let endCoord = trajectBD.data.endCoord;
         this.setTrajectInModification(trajectBD.data._id);
@@ -419,7 +421,11 @@ export default {
         this.resetMarkers();
     },
     async showTraject(trajectId){
-        const traject = await axios.get('http://localhost:5555/trajects/'+trajectId);
+        const traject = await axios.get('http://localhost:5555/trajects/'+trajectId,{
+                headers: {
+                'x-access-token': this.getToken
+                }
+            });
         let stations = traject.data.stations;
         /*traject.data.stations.forEach(function(station){
             stations.push(station)

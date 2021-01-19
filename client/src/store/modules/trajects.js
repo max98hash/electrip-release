@@ -68,15 +68,18 @@ const getters = {
 };
 
 const actions = {
-    async deleteTraject({commit},trajectId){
-        const response = await axios.delete('http://localhost:5555/trajects/'+trajectId);
+    async deleteTraject({commit},{trajectId, token}){
+        const response = await axios.delete('http://localhost:5555/trajects/'+trajectId,{
+            headers: {
+            'x-access-token': token
+            }
+        });
         console.log("Traject deleted : ");
         console.log(response.data)
         commit('setAfterRemoveTraject',trajectId);
     },
-    async fetchTrajects({commit},userId){
+    async fetchTrajects({commit},token){
         console.log("fetchTrajects")
-        console.log("userId before request "+userId)
         /*const req = await axios.get({
             method: 'GET',
             url: 'http://localhost:5555/trajects/user/'+userId,
@@ -84,9 +87,13 @@ const actions = {
                 userId: userId
             },
         });*/
-        if(userId!=null){
+        if(token!=null){
             state.trajectsButFiltered=true;
-            const req = await axios.get('http://localhost:5555/trajects/user/'+userId);
+            const req = await axios.get('http://localhost:5555/trajects/',{
+                headers: {
+                'x-access-token': token
+                }
+            });
             if(state.allTrajects){
                 req.data.sort(function custom_sort(traject1, traject2) {
                     return new Date(traject1.date).getTime() - new Date(traject2.date).getTime();
@@ -109,7 +116,7 @@ const actions = {
         }
 
     },
-    async addtraject({commit},userId){
+    async addtraject({commit},token){
         const url = 'https://api.mapbox.com/directions/v5/'+
             'mapbox/driving/'+
             state.origin+';'+state.destination+
@@ -132,16 +139,18 @@ const actions = {
             startName: infos.data.waypoints[0].name != "" ? infos.data.waypoints[0].name : origin,
             endCoord: infos.data.waypoints[waypoints-1].location,
             endName: infos.data.waypoints[waypoints-1].name != "" ? infos.data.waypoints[waypoints-1].name : destination,
-            userId: userId,
             distance: infos.data.routes[0].distance,
             date: state.date,
             carId: state.carId,
             carName: state.carName,
             stations: [],
-            //coordinates: infos.data.routes[0].geometry.coordinates,
         }
         console.log(payload);
-        const trajet = await axios.post('http://localhost:5555/trajects/create',payload);
+        const trajet = await axios.post('http://localhost:5555/trajects/create',payload,{
+            headers: {
+            'x-access-token': token
+            }
+        });
         console.log(trajet);
         commit('newTraject',trajet.data);
     },
