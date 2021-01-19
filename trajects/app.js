@@ -15,9 +15,10 @@ const DBNAME = "trajects";
 const HOST = "mongodb:27017";
 const HOST_LOCAL = "localhost:27017";
 
-mongoose.connect(`mongodb://${HOST}/${DBNAME}`,
+mongoose.connect(`mongodb://${HOST_LOCAL}/${DBNAME}`,
     { useNewUrlParser: true,
-    useUnifiedTopology: true })
+    useUnifiedTopology: true,
+    useFindAndModify: false })
 .then(() => console.log('Connexion à MongoDB réussie !'))
 .catch(() => console.log('Connexion à MongoDB échouée !'));
 
