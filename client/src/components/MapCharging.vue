@@ -479,6 +479,7 @@ export default {
   created(){
     busMap.$on('displayCharging' ,(idTraject) => {
         this.setDisplayChargingTrue();
+        this.setViewTrajectToFalse()
         this.displayCharging(idTraject);
     })
     busMap.$on('station' ,(station) => {

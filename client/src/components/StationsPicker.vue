@@ -87,13 +87,24 @@
             justify="center"
             class="mt-2"
         >
-            <v-btn
-                depressed
-                color="green"
-                @click="validateStations"
-            >
-                Validate your stations
-            </v-btn>
+            <v-col cols="12" md="7">
+                <v-btn
+                    depressed
+                    color="green"
+                    @click="validateStations"
+                >
+                    Validate your stations
+                </v-btn>
+            </v-col>
+            <v-col cols="12" md="5">
+                <v-btn
+                    depressed
+                    color="red"
+                    @click="cancel"
+                >
+                    Cancel
+                </v-btn>
+            </v-col>
         </v-row>
     </v-container>
   </v-card>
@@ -111,11 +122,14 @@ export default {
     computed: mapGetters(['getStations','getTrajectInModification','getUserId','getToken']),
     methods: {
         ...mapActions(['addStationsToTraject','fetchTrajects']),
-        ...mapMutations(['setPickStationToFalse']),
+        ...mapMutations(['setPickStationToFalse','trajectUpdated']),
         async validateStations(){
             console.log("Stations validated");
             await this.addStationsToTraject({stations: this.getStations, token: this.getToken});
             return this.fetchTrajects(this.getToken);
+        },
+        cancel(){
+            this.trajectUpdated();
         }
     }
     

@@ -77,6 +77,59 @@
                         </v-row>
                         <v-divider></v-divider>
                         <v-row
+                            v-for="station in traject.stations"
+                            :key="station.title"
+                            class="mt-3"
+                        >
+                            <v-row
+                                justify="center"
+                                no-gutters
+                                class="mb-3"
+                            >
+                                <v-col cols="12" md="6">
+                                    <v-icon
+                                        right
+                                        dark
+                                    >
+                                        mdi-ev-station
+                                    </v-icon>
+                                    {{ station.title || 'Not set' }}
+                                </v-col>
+                                <v-col cols="12" md="6">
+                                    <v-icon
+                                        right
+                                        dark
+                                    >
+                                        mdi-calendar-clock
+                                    </v-icon>
+                                    {{ station.access || 'Not set' }}
+                                </v-col>
+                                <v-col cols="12" md="6" >
+                                    <v-icon
+                                        right
+                                        dark
+                                    >
+                                        mdi-map-marker
+                                    </v-icon>
+                                    {{ station.address || 'Not set' }}
+                                </v-col>
+
+                                <v-col cols="12" md="6" >
+                                    <v-icon
+                                        right
+                                        dark
+                                    >
+                                        mdi-information
+                                    </v-icon>
+                                    {{ station.comments || 'Not set' }}
+                                </v-col>
+                            
+                            </v-row>
+
+                        
+                        </v-row>
+                        <v-divider></v-divider>
+                        <v-row
                         justify="center"
                         no-gutters
                         class="pt-3"
@@ -118,7 +171,7 @@
                             </v-btn>
                         </v-col>
 
-                        <v-col cols="12" md="4" class="pb-2">
+                        <v-col cols="12" md="5" class="pb-2">
                             <v-btn
                                 depressed
                                 color="indigo"
@@ -166,6 +219,13 @@
                 color="green"
                 @click="showAllTrajects"
             >
+            <v-icon
+                right
+                dark
+                class="pr-6"
+            >
+                mdi-eye
+            </v-icon>
                 Show All Trajects
             </v-btn>
         </v-row>

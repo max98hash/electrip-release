@@ -125,8 +125,8 @@ export default {
         ...mapActions(['addtraject','fetchCars','filterSelectedTrajects']),
         ...mapMutations(['minusPickerStep','plusPickerStep','invertTrajectPicker','initPickerStep']),
         async submitTraject(){
-            const map = this.getMap;
-            map.removeRoutes();
+            /*const map = this.getMap;
+            map.removeRoutes();*/
             this.invertTrajectPicker();
             this.initPickerStep();
             await this.addtraject(this.getToken);
