@@ -8,7 +8,7 @@ exports.getTraject = (req, res, next) => {
 }
 
 exports.getTrajects = (req, res, next) => {
-    let userId = req.params.userId;
+    let userId = req.userId;
 	Traject.find({userId: userId})
     .then(trajects => res.status(200).json(trajects))
     .catch(error => res.status(400).json({ error }));
@@ -25,10 +25,9 @@ exports.getTrajectsBetweenDates = (req, res, next) => {
 
 exports.createTraject = (req, res, next) => {
     delete req.body._id;
-    console.log("données reçues : " + req.body);
-	const traject = new Traject({
-		...req.body
-	});
+    const trajectJSON = {...req.body}
+    trajectJSON['userId'] = req.userId
+	const traject = new Traject(trajectJSON);
 	traject.save()
 		.then(() => res.status(201).json(traject))
 		.catch(error => res.status(400).json({ error }));
@@ -41,7 +40,7 @@ exports.modifyTraject = (req, res, next) => {
         startName: req.body.startName,
         endCoord: req.body.endCoord,
         endName: req.body.endName,
-        userId: req.body.userId,
+        userId: req.userId,
         distance: req.body.distance,
         date : req.body.date,
         carId: req.body.carId,

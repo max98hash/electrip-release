@@ -7,23 +7,23 @@ exports.getCar = (req, res, next) => {
 }
 
 exports.getCars = (req, res, next) => {
-    let userId = req.params.userId;
+    let userId = req.userId;
 	Car.find({userId: userId})
     .then(cars => res.status(200).json(cars))
     .catch(error => res.status(400).json({ error }));
 }
 
 exports.createCar = (req, res, next) => {
-	delete req.body._id;
-	const car = new Car({
-		...req.body
-	});
+    delete req.body._id;
+    const carJSON = {...req.body};
+    carJSON['userId'] = req.userId;
+	const car = new Car(carJSON);
 	car.save()
 		.then(() => res.status(201).json(car))
 		.catch(error => res.status(400).json({ error }));
 }
 
-exports.modifyCar = (req, res, next) => {
+/*exports.modifyCar = (req, res, next) => {
 	Car.findByIdAndUpdate(req.params.id,
 		{ brand: req.body.brand, model: req.body.model,  years: req.body.years, matriculationNbr: req.body.matriculationNbr, 
         autonomy: req.body.autonomy}, {new: true}, 
@@ -34,13 +34,13 @@ exports.modifyCar = (req, res, next) => {
                 return res.status(201).json(result);
         }
     );
-};
+};*/
 
-exports.deleteCar = (req, res, next) => {
+/*exports.deleteCar = (req, res, next) => {
     Car.findByIdAndDelete(req.params.id, (err, result) => {
         if (err) 
                 return res.status(400).json(err);
             else
                 return res.status(201).json({ message: "car successfully deleted!", result });
     })
-}
+}*/

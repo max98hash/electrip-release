@@ -22,6 +22,8 @@ const actions = {
             password: authCouple.password,
             email: authCouple.email,
         });
+        console.log('token');
+        console.log(response.data.token)
         commit('setLogin',{
             id: response.data.userId,
             token: response.data.token,

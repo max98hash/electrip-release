@@ -15,7 +15,7 @@ export default {
       accessToken: 'pk.eyJ1IjoibWF4aGFzaCIsImEiOiJja2h5dXRoajAwOGpnMnlvaDh1bTEwMDY4In0.k8O0vTEqjd0t6WHOHiS_8A',
     };
   },
-  computed: mapGetters(['getOrigin','getDestination','getUserId','getCalendarOverlay','getTrajectPicker']),
+  computed: mapGetters(['getOrigin','getDestination','getCalendarOverlay','getTrajectPicker']),
   methods: {
     ...mapMutations(['setOrigin','setDestination','invertCalendarOverlay','setOriginName','setDestinationName','invertTrajectPicker','setMap']),
     ...mapActions(['fetchTrajects','addtraject']),

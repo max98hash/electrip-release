@@ -108,14 +108,14 @@ export default {
         return {
             stations: this.$store.state.trajects.trajects,
     }},
-    computed: mapGetters(['getStations','getTrajectInModification','getUserId']),
+    computed: mapGetters(['getStations','getTrajectInModification','getUserId','getToken']),
     methods: {
         ...mapActions(['addStationsToTraject','fetchTrajects']),
         ...mapMutations(['setPickStationToFalse']),
         async validateStations(){
             console.log("Stations validated");
-            await this.addStationsToTraject(this.getStations);
-            return this.fetchTrajects(this.getUserId);
+            await this.addStationsToTraject({stations: this.getStations, token: this.getToken});
+            return this.fetchTrajects(this.getToken);
         }
     }
     

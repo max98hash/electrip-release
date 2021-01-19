@@ -182,7 +182,7 @@ export default {
       date: null,
       trajects: this.$store.state.trajects.trajects,
     }},
-    computed: mapGetters(['getCarName','getTrajects','getUserId','getAllTrajects','getViewtraject']),
+    computed: mapGetters(['getCarName','getTrajects','getUserId','getAllTrajects','getViewtraject','getToken']),
     methods: {
         ...mapMutations(['setCarName','setAllTrajectsToTrue','setViewTrajectToFalse','setDisplayChargingFalse']),
         ...mapActions(['fetchTrajects','addtraject','filterSelectedTrajects','deleteTraject']),
@@ -191,12 +191,12 @@ export default {
         },
         async remove(event){
             let trajectId = event.currentTarget.id;
-            await this.deleteTraject(trajectId);
+            await this.deleteTraject({trajectId, token: this.getToken});
             this.filterSelectedTrajects();
         },
         async showAllTrajects(){
             this.setAllTrajectsToTrue();
-            await this.fetchTrajects(this.getUserId);
+            await this.fetchTrajects(this.getToken);
             this.filterSelectedTrajects();
         },
         displayCharging(event){

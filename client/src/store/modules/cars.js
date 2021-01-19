@@ -15,26 +15,25 @@ const getters = {
 };
 
 const actions = {
-    async fetchCars({commit},userId){
-        /*const response = await axios.get({
-            method: 'GET',
-            url: 'http://localhost:3000/cars',
+    async fetchCars({commit},token){
+        const response = await axios.get('http://localhost:3000/cars',{
             headers: {
-                'Authorization': token
-            },
-            data: {
-                userId: userId
-            },
-        });*/
-        const response = await axios.get('http://localhost:3000/cars/user/'+userId);
+            'x-access-token': token
+            }
+        });
         console.log("fetch cars : ");
         console.log(response.data)
         commit('setCars',response.data);
     },
-    async addCar({commit},car){
+    async addCar({commit},{car,token}){
         console.log(car);
+        console.log(token);
         const response = await axios.post(
-            'http://localhost:3000/cars/create',car
+            'http://localhost:3000/cars/create',car,{
+                headers: {
+                'x-access-token': token
+                }
+            }
         );
         console.log("add car : ");
         console.log(response.data)

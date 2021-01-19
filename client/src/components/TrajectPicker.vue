@@ -120,7 +120,7 @@ export default {
             e1: 1,
         }
     },
-    computed: mapGetters(['getPickerStep','getOriginName','getDestinationName','getCarName','getDate','getMap','getUserId','getEndDate','getStartDate']),
+    computed: mapGetters(['getPickerStep','getOriginName','getDestinationName','getCarName','getDate','getMap','getUserId','getEndDate','getStartDate','getToken']),
     methods: {
         ...mapActions(['addtraject','fetchCars','filterSelectedTrajects']),
         ...mapMutations(['minusPickerStep','plusPickerStep','invertTrajectPicker','initPickerStep']),
@@ -129,7 +129,7 @@ export default {
             map.removeRoutes();
             this.invertTrajectPicker();
             this.initPickerStep();
-            await this.addtraject(this.getUserId);
+            await this.addtraject(this.getToken);
             this.filterSelectedTrajects();
         },
     }

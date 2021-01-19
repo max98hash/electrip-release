@@ -14,7 +14,9 @@ module.exports = (req, res, next) => {
             message: "Unauthorized!"
             });
         }
-        req.userId = decoded;
+        req.userId = decoded.id;
+        console.log("Req userId");
+        console.log(req.userId);
         next();
     });
 };
