@@ -8,7 +8,7 @@ const auth = require('../middleware/auth');
 router.get('/:id', auth, cars.getCar);
 router.post('/create', auth, cars.createCar);
 //router.put('/:id', auth, cars.modifyCar);
-//router.delete('/:id', auth, cars.deleteCar);
+router.delete('/:id', auth, cars.deleteCar);
 router.get('/', auth, cars.getCars);
 
 module.exports = router;

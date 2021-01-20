@@ -2,8 +2,8 @@
   <v-app id="inspire">
     <v-main>
       <v-container>
-        <v-row justify="center">
-          <v-col cols="12" md="3" justify="center">
+        <v-row justify="center" align="center">
+          <v-col cols="12" lg="3" justify="center">
             <Menu/>
           </v-col>
 
@@ -21,7 +21,7 @@
           <v-col v-if="this.$store.state.trajects.picker" cols="12" lg="7" class="mt-2">
             <TrajectPicker/>
           </v-col>
-          <v-col v-if="this.$store.state.trajects.pickerEvents" cols="12" lg="7" class="mt-2">
+          <v-col v-else-if="this.$store.state.trajects.pickerEvents" cols="12" lg="7" class="mt-2">
             <EventPicker/>
           </v-col>
           <v-col v-else-if="this.$store.state.map.pickStation" cols="12" lg="7" >

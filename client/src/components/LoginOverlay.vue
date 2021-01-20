@@ -100,6 +100,8 @@ export default {
     setLogin(){
         this.invertOverlayLogin();
         this.invertLoginOrRegister();
+        this.email = "";
+        this.password = "";
     }
   },
 }

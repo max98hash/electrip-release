@@ -36,11 +36,11 @@ exports.createCar = (req, res, next) => {
     );
 };*/
 
-/*exports.deleteCar = (req, res, next) => {
+exports.deleteCar = (req, res, next) => {
     Car.findByIdAndDelete(req.params.id, (err, result) => {
         if (err) 
                 return res.status(400).json(err);
             else
                 return res.status(201).json({ message: "car successfully deleted!", result });
     })
-}*/
+}

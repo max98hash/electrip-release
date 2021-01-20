@@ -2,49 +2,10 @@ const axios = require('axios');
 
 const state = {
     trajects: [
-        /*{ 
-            _id: "4654revze5r48vzc6z54f89",
-            name: "Bordeaux -> Castres",
-            startCoord: [-0.579027, 44.837638],
-            startName: "Place Rohan",
-            endCoord: [2.24, 43.605831],
-            endName: "Rue Émile Zola",
-            userId: "6001a58a2e36c0002ba9b284",
-            distance: 312980.688,
-            date: "2021-01-15",
-            carId: "90949a02ba9b284",
-            carName: "Nissan Juke"
-        },
-        { 
-            _id: "4654revze5r48vzc6z54f89",
-            name: "Madrid -> Zaragoza",
-            startCoord: [-0.579027, 44.837638],
-            startName: "Place Rohan",
-            endCoord: [2.24, 43.605831],
-            endName: "Rue Émile Zola",
-            userId: "6001a58a2e36c0002ba9b284",
-            distance: 312980.688,
-            date: "2021-02-05",
-            carId: "90949a02ba9b284",
-            carName: "Nissan Juke"
-        },*/
+
     ],
     events: [
-        {
-            name: "Vacances",
-            start: "2021-01-19",
-            end: "2021-01-26",
-            color: "orange",
-            timed: false,
-            category: "Famille"
-        },
-        {
-            name: "Rdv",
-            start: "2021-01-12",
-            color: "pink",
-            timed: false,
-            category: "Travail"
-        }
+
     ],
     trajectsSelected: [],
     origin: null,
@@ -301,19 +262,6 @@ const actions = {
                 return displayableEvent
             })
         }
-        /*filteredTrajects.push({
-            name: "Vacances",
-            start: "2021-01-19",
-            end: "2021-01-26",
-            color: "orange",
-            timed: false,
-        })
-        filteredTrajects.push({
-            name: "Rdv",
-            start: "2021-01-12",
-            color: "pink",
-            timed: false,
-        })*/
         let toDisplay = filteredTrajects.concat(filteredEvents);
         commit('setTrajectsSelected',toDisplay);
     },

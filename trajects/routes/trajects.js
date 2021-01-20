@@ -10,7 +10,7 @@ router.get('/', auth, trajects.getTrajects);
 router.post('/create', auth, trajects.createTraject);
 router.put('/:id', auth, trajects.modifyTraject);
 router.delete('/:id', auth, trajects.deleteTraject);
-
+router.delete('/car/:idCar', auth, trajects.deleteTrajectLinkedToCar);
 //router.get('/user/:userId/:dateBeg/:dateEnd', trajects.getTrajectsBetweenDates);
 
 module.exports = router;

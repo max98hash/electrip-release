@@ -63,3 +63,11 @@ exports.deleteTraject = (req, res, next) => {
                 return res.status(201).json({ message: "traject successfully deleted!", result });
     })
 }
+
+exports.deleteTrajectLinkedToCar = (req, res, next) => {
+    let idCar = req.params.idCar;
+    Traject.deleteMany({carId: idCar}, (err, result) => {
+        if(err) return res.status(400).json(err);
+        else return res.status(201).json({ message: "trajects successfully deleted!", result });
+    })
+}

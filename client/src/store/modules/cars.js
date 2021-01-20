@@ -38,6 +38,25 @@ const actions = {
         console.log("add car : ");
         console.log(response.data)
         commit('newCar',response.data);
+    },
+    async deleteCar({commit},{carId,token}){
+        const responseCars = await axios.delete(
+            'http://localhost:3000/cars/'+carId,{
+                headers: {
+                'x-access-token': token
+                }
+            }
+        );
+        console.log(responseCars);
+        const responseTrajects = await axios.delete(
+            'http://localhost:5555/trajects/car/'+carId,{
+                headers: {
+                'x-access-token': token
+                }
+            }
+        );
+        console.log(responseTrajects);
+        commit('removeCar',carId);
     }
 };
 
@@ -45,6 +64,11 @@ const mutations = {
     setCreateCar: state => state.createCar=!state.createCar,
     setCars: (state, cars) => state.cars = cars ,
     newCar: (state, car) => state.cars.push(car),
+    removeCar: (state, carId) => {
+        let temp = state.cars;
+        temp = state.cars.filter(car => car._id!=carId);
+        state.cars = temp;
+    }
 };
 
 export default {
