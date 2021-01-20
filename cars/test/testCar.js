@@ -46,6 +46,27 @@ describe('Cars', () => {
             });
         });
     });
+
+    describe('/GET Car', () => {
+        it('it should GET all cars', (done) => {
+            carExample.save((err, car) => {
+                chai.request(server)
+                .get('/cars/')
+                .send(car)
+                .end((err, res) => {
+                    res.should.have.status(201);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('brand');
+                    res.body.should.have.property('model');
+                    res.body.should.have.property('years');
+                    res.body.should.have.property('matriculationNbr');
+                    res.body.should.have.property('autonomy');
+                    res.body.should.have.property('_id').eql(car.id);
+                    done();
+                });
+            });
+        });
+    });
     /*
       * Test the /POST route
       */
