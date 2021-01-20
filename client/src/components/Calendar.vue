@@ -73,7 +73,7 @@
           </v-menu>
         </v-toolbar>
       </v-sheet>
-      <v-sheet height="550">
+      <v-sheet height="600">
         <v-calendar
           ref="calendar"
           v-model="focus"
@@ -122,7 +122,6 @@ import { mapGetters, mapActions, mapMutations } from 'vuex';
         this.type = 'day'
         this.setStartDate(date);
         this.setEndDate(date);
-        console.log('viewDay');
       },
       getEventColor (event) {
         return event.color

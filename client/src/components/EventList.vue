@@ -151,9 +151,6 @@ export default {
     methods: {
         ...mapMutations(['setCarName','setAllTrajectsToTrue','setViewTrajectToFalse','setDisplayChargingFalse','invertEventPicker']),
         ...mapActions(['fetchEvents','addtraject','filterSelectedTrajects','deleteEvent']),
-        showButton(event){
-            console.log(event.currentTarget.id)
-        },
         async remove(event){
             let eventId = event.currentTarget.id;
             await this.deleteEvent({eventId, token: this.getToken});

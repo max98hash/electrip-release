@@ -54,34 +54,22 @@ const getters = {
 
 const actions = {
     async deleteTraject({commit},{trajectId, token}){
-        const response = await axios.delete('http://localhost:5555/trajects/'+trajectId,{
+        await axios.delete('http://localhost:5555/trajects/'+trajectId,{
             headers: {
             'x-access-token': token
             }
         });
-        console.log("Traject deleted : ");
-        console.log(response.data)
         commit('setAfterRemoveTraject',trajectId);
     },
     async deleteEvent({commit},{eventId, token}){
-        const response = await axios.delete('http://localhost:7777/activities/'+eventId,{
+        await axios.delete('http://localhost:7777/activities/'+eventId,{
             headers: {
             'x-access-token': token
             }
         });
-        console.log("Event deleted : ");
-        console.log(response.data)
         commit('setAfterRemoveEvent',eventId);
     },
     async fetchTrajects({commit},token){
-        console.log("fetchTrajects")
-        /*const req = await axios.get({
-            method: 'GET',
-            url: 'http://localhost:5555/trajects/user/'+userId,
-            data: {
-                userId: userId
-            },
-        });*/
         if(token!=null){
             state.trajectsButFiltered=true;
             const req = await axios.get('http://localhost:5555/trajects/',{
@@ -128,19 +116,12 @@ const actions = {
             'x-access-token': token
             }
         })
-        console.log("Autonomy")
-        console.log(carLinked.data.autonomy)
-        console.log("Distance")
         const distance = Math.round(infos.data.routes[0].distance * 0.01) / 10
-        console.log(distance)
-        console.log("Condition")
-        console.log(carAutonomy >= infos.data.routes[0].distance ? false : true)
         const carAutonomy = carLinked.data.autonomy;
         const waypoints = infos.data.waypoints.length;
         const origin = state.originName.split(',')[0];
         const destination = state.destinationName.split(',')[0];
         const label = origin+" -> "+destination;
-        console.log(infos);
         const payload = {
             name: label,
             startCoord: infos.data.waypoints[0].location,
@@ -154,17 +135,14 @@ const actions = {
             stations: [],
             chargingNecessary : carAutonomy >= distance ? false : true,
         }
-        console.log(payload);
         const trajet = await axios.post('http://localhost:5555/trajects/create',payload,{
             headers: {
             'x-access-token': token
             }
         });
-        console.log(trajet);
         commit('newTraject',trajet.data);
     },
     async fetchEvents({commit},token){
-        console.log('fetchEvents')
         if(token!=null){
             state.trajectsButFiltered=true;
             const req = await axios.get('http://localhost:7777/activities/',{
@@ -194,14 +172,11 @@ const actions = {
         }
     },
     async addEvent({commit},{token,event}){
-        console.log("event")
-        console.log(event)
         const returnedEvent = await axios.post('http://localhost:7777/activities/create',event,{
             headers: {
             'x-access-token': token
             }
         });
-        console.log(returnedEvent);
         commit('newEvent',returnedEvent.data);
     },
     filterSelectedTrajects({commit}){

@@ -124,7 +124,6 @@ export default {
         ...mapActions(['addStationsToTraject','fetchTrajects']),
         ...mapMutations(['setPickStationToFalse','trajectUpdated']),
         async validateStations(){
-            console.log("Stations validated");
             await this.addStationsToTraject({stations: this.getStations, token: this.getToken});
             return this.fetchTrajects(this.getToken);
         },

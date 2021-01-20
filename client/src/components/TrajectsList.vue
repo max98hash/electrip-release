@@ -6,6 +6,12 @@
                     <v-expansion-panel-header>
                         <v-row no-gutters>
                         <v-col cols="4">
+                            <v-icon
+                                    left
+                                    dark
+                                >
+                                    mdi-map
+                            </v-icon>
                             {{ traject.name }}
                         </v-col>
                         <v-col
@@ -249,9 +255,6 @@ export default {
     methods: {
         ...mapMutations(['setCarName','setAllTrajectsToTrue','setViewTrajectToFalse','setDisplayChargingFalse']),
         ...mapActions(['fetchTrajects','addtraject','filterSelectedTrajects','deleteTraject']),
-        showButton(event){
-            console.log(event.currentTarget.id)
-        },
         async remove(event){
             let trajectId = event.currentTarget.id;
             await this.deleteTraject({trajectId, token: this.getToken});
@@ -271,7 +274,7 @@ export default {
         hideTraject(){
             this.setDisplayChargingFalse();
             this.setViewTrajectToFalse();
-            console.log("hide traject")
+
         }
     },
 }

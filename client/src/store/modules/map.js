@@ -32,22 +32,16 @@ const actions = {
             'x-access-token': token
             }
         })
-        console.log("Trajet à modifier : ")
-        console.log(traject)
         let newStations = [];
         for (let index = 0; index < stations.length; index++) {
             newStations.push(stations[index])
         }
         traject.data.stations = newStations;
-        console.log("Trajet modifié : ")
-        console.log(traject)
-        const updatedTraject = await axios.put('http://localhost:5555/trajects/'+state.trajectInModification,traject.data,{
+        await axios.put('http://localhost:5555/trajects/'+state.trajectInModification,traject.data,{
             headers: {
             'x-access-token': token
             }
         });
-        console.log("Retour de la BD : ")
-        console.log(updatedTraject);
         commit('trajectUpdated');
     }
 }
@@ -69,10 +63,8 @@ const mutations = {
             }
         }
         if(!alreadyExists){
-            console.log("La station n'existait pas on ajoute")
             state.stations.push(station)
         }else{
-            console.log("La station existait on supprime")
             state.stations.splice(indexToRemove, 1);
         }
     },
@@ -88,8 +80,6 @@ const mutations = {
     setViewTrajectToTrue: state => state.viewTraject = true,
     setViewTrajectToFalse: state => {
         state.viewTraject = false
-        console.log("View traject : "+state.viewTraject)
-        console.log("View charging : "+state.displayCharging)
     }
 }
 

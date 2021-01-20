@@ -328,8 +328,6 @@ export default {
 
         if(this.getViewtraject){
             this.displayMarkersChargingIcon(coordCharging)
-        }else{
-            this.displayMarkers(markers)
         }
     },
     displayMarkers(markers){
@@ -437,8 +435,6 @@ export default {
         })
         coordinates = coordinates+traject.data.endCoord[0]+','+traject.data.endCoord[1]
 
-        console.log(coordinates);
-
         const url = 'https://api.mapbox.com/directions/v5/'+
             'mapbox/driving/'+
             coordinates+'?'+
@@ -485,7 +481,6 @@ export default {
     busMap.$on('station' ,(station) => {
         this.setClickStationInvert()
         if(this.getClickStation){
-           console.log("Station cliquée")
             this.addOrRemoveStation(station); 
         }
     })

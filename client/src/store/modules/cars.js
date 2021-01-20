@@ -21,13 +21,9 @@ const actions = {
             'x-access-token': token
             }
         });
-        console.log("fetch cars : ");
-        console.log(response.data)
         commit('setCars',response.data);
     },
     async addCar({commit},{car,token}){
-        console.log(car);
-        console.log(token);
         const response = await axios.post(
             'http://localhost:3000/cars/create',car,{
                 headers: {
@@ -35,27 +31,23 @@ const actions = {
                 }
             }
         );
-        console.log("add car : ");
-        console.log(response.data)
         commit('newCar',response.data);
     },
     async deleteCar({commit},{carId,token}){
-        const responseCars = await axios.delete(
+        await axios.delete(
             'http://localhost:3000/cars/'+carId,{
                 headers: {
                 'x-access-token': token
                 }
             }
         );
-        console.log(responseCars);
-        const responseTrajects = await axios.delete(
+        await axios.delete(
             'http://localhost:5555/trajects/car/'+carId,{
                 headers: {
                 'x-access-token': token
                 }
             }
         );
-        console.log(responseTrajects);
         commit('removeCar',carId);
     }
 };

@@ -59,7 +59,6 @@ export default {
     ...mapMutations(['invertCalendarOverlay','setDate','invertCarOverlay','plusPickerStep']),
     getDate(){
         this.setDate(this.date);
-        console.log(this.date)
         this.modal=false;
         this.plusPickerStep();
     }
