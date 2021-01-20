@@ -144,7 +144,6 @@ export default {
         setLogin(){
             this.invertOverlayLogin();
             this.invertLoginOrRegister();
-            
         },
         async setLogout(){
             this.$store.state.trajects.allTrajects=false;

@@ -2,12 +2,13 @@
     <v-overlay
         :value="getOverlayLogin"
     >
-        <v-form
-        ref="form"
-        v-model="valid"
-        lazy-validation
-        >
-        <v-container>
+    <v-card>
+        <v-container class="pt-5 pr-5 pl-5">
+            <v-form
+            ref="form"
+            v-model="valid"
+            lazy-validation
+            >
             <v-row>
                 <v-text-field
                 label="Email"
@@ -17,6 +18,7 @@
                 required
                 outlined
                 clearable
+                class="mr-3 ml-3"
                 ></v-text-field>
             </v-row>
             <v-row>
@@ -49,8 +51,10 @@
                 Login
             </v-btn>
             </v-row>
+            </v-form>
         </v-container>
-        </v-form>
+    </v-card>
+        
     </v-overlay>
 </template>
 
@@ -78,7 +82,8 @@ export default {
     ...mapMutations(['invertOverlayLogin','invertLoginOrRegister','setDisplayChargingFalse']),
     async submit(){
         if(this.$refs.form.validate()){
-            if(!this.getLoginOrRegister){
+            console.log(this.getLoginOrRegister)
+            if(this.getLoginOrRegister){
                 console.log("login")
                 await this.login({email: this.email,password: this.password}); 
                 this.invertLoginOrRegister();
