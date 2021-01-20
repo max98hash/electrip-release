@@ -9,7 +9,7 @@ exports.getActivity = (req, res, next) => {
 exports.getActivities = (req, res, next) => {
     let userId = req.userId;
 	Activity.find({userId: userId})
-    .then(cars => res.status(200).json(cars))
+    .then(activities => res.status(200).json(activities))
     .catch(error => res.status(400).json({ error }));
 }
 
@@ -23,10 +23,10 @@ exports.createActivity = (req, res, next) => {
 		.catch(error => res.status(400).json({ error }));
 }
 
-/*exports.modifyCar = (req, res, next) => {
-	Car.findByIdAndUpdate(req.params.id,
-		{ brand: req.body.brand, model: req.body.model,  years: req.body.years, matriculationNbr: req.body.matriculationNbr, 
-        autonomy: req.body.autonomy}, {new: true}, 
+exports.modifyActivity = (req, res, next) => {
+	Activity.findByIdAndUpdate(req.params.id,
+		{ name: req.body.name, description: req.body.description,  start: req.body.start, end: req.body.end, 
+        category: req.body.category, userId: req.body.userId}, {new: true}, 
         function (err, result) {
             if (err) 
                 return res.status(400).json(err);
@@ -34,7 +34,7 @@ exports.createActivity = (req, res, next) => {
                 return res.status(201).json(result);
         }
     );
-};*/
+};
 
 exports.deleteActivity = (req, res, next) => {
     Activity.findByIdAndDelete(req.params.id, (err, result) => {
