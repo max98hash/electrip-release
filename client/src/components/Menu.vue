@@ -67,7 +67,7 @@
                     <v-btn
                         depressed
                         color="primary"
-                        @click="setLogin"
+                        @click="invertOverlayLogin"
                         rounded
                         class="mb-2"
                     >

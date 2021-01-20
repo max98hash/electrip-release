@@ -78,7 +78,8 @@ export default {
     ...mapMutations(['invertOverlayLogin','invertLoginOrRegister','setDisplayChargingFalse']),
     async submit(){
         if(this.$refs.form.validate()){
-            if(this.getLoginOrRegister){
+            if(!this.getLoginOrRegister){
+                console.log("login")
                 await this.login({email: this.email,password: this.password}); 
                 this.invertLoginOrRegister();
                 this.setDisplayChargingFalse()
@@ -88,7 +89,7 @@ export default {
                 this.filterSelectedTrajects();
             }else{
                 console.log("register");
-                this.register({email: this.email,password: this.password})
+                await this.register({email: this.email,password: this.password})
                 this.email="";
                 this.password="";
             }
