@@ -129,6 +129,7 @@
 
 <script>
 import { mapGetters, mapMutations } from 'vuex';
+import { busMap } from '../main';
 
 export default {
     data: () => ({
@@ -152,6 +153,7 @@ export default {
             this.$store.state.trajects.trajectsSelected=[];
             this.$store.state.trajects.events=[];
             this.logout();
+            busMap.$emit('hideAll');
         }
     },
     

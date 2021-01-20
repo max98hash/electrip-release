@@ -12,6 +12,7 @@ const trajectSchema = mongoose.Schema({
   carId: {type: String, required: true},
   carName: {type: String, required: true},
   stations: {type: Array, required: false},
+  chargingNecessary: {type: Boolean, required: false},
 });
 
 module.exports = mongoose.model('Traject', trajectSchema);

@@ -494,6 +494,10 @@ export default {
         this.setViewTrajectToTrue();
         this.showTraject(idTraject);
     })
+    busMap.$on('hideAll', () => {
+        this.removeClusterLayer();
+        this.removeLineLayer();
+    })
   }
 };
 </script>

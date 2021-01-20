@@ -16,13 +16,16 @@
                             <v-row
                                 no-gutters
                                 style="width: 100%"
-                                justify="center"
+                                justify="space-around"
                             >
                                 <v-col cols="3">
-                                {{ Math.round(traject.distance * 0.01) / 10 || 'Not set' }} km
+                                {{ traject.distance || 'Not set' }} km
                                 </v-col>
-                                <v-col cols="3">
+                                <v-col cols="3" v-if="traject.chargingNecessary">
                                 Charges: {{ traject.stations.length || 'Not set' }}
+                                </v-col>
+                                <v-col cols="3" v-else>
+                                Charges: Not necessary
                                 </v-col>
                                 
                                 <v-col cols="4">
@@ -171,7 +174,7 @@
                             </v-btn>
                         </v-col>
 
-                        <v-col cols="12" md="5" class="pb-2">
+                        <v-col cols="12" md="5" class="pb-2" v-if="traject.chargingNecessary">
                             <v-btn
                                 depressed
                                 color="indigo"

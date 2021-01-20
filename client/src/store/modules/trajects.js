@@ -123,6 +123,19 @@ const actions = {
             'language=fr&'+
             'access_token=pk.eyJ1IjoibWF4aGFzaCIsImEiOiJja2h5dXRoajAwOGpnMnlvaDh1bTEwMDY4In0.k8O0vTEqjd0t6WHOHiS_8A'
         const infos = await axios.get(url);
+        const carLinked = await axios.get('http://localhost:3000/cars/'+state.carId,{
+            headers: {
+            'x-access-token': token
+            }
+        })
+        console.log("Autonomy")
+        console.log(carLinked.data.autonomy)
+        console.log("Distance")
+        const distance = Math.round(infos.data.routes[0].distance * 0.01) / 10
+        console.log(distance)
+        console.log("Condition")
+        console.log(carAutonomy >= infos.data.routes[0].distance ? false : true)
+        const carAutonomy = carLinked.data.autonomy;
         const waypoints = infos.data.waypoints.length;
         const origin = state.originName.split(',')[0];
         const destination = state.destinationName.split(',')[0];
@@ -134,11 +147,12 @@ const actions = {
             startName: infos.data.waypoints[0].name != "" ? infos.data.waypoints[0].name : origin,
             endCoord: infos.data.waypoints[waypoints-1].location,
             endName: infos.data.waypoints[waypoints-1].name != "" ? infos.data.waypoints[waypoints-1].name : destination,
-            distance: infos.data.routes[0].distance,
+            distance: distance,
             date: state.date,
             carId: state.carId,
             carName: state.carName,
             stations: [],
+            chargingNecessary : carAutonomy >= distance ? false : true,
         }
         console.log(payload);
         const trajet = await axios.post('http://localhost:5555/trajects/create',payload,{
