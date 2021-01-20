@@ -1,0 +1,100 @@
+version: "3.1"
+
+services:
+  mongodb:
+    container_name: mongodb
+    image: mongo
+    command: mongod --port 27017
+    ports:
+      - "27017:27017"
+
+  mongo_auth:
+    container_name: mongo_auth
+    image: mongo
+    command: mongod --port 27044
+    ports:
+      - "27044:27044"
+
+  mongo_trajects:
+    container_name: mongo_trajects
+    image: mongo
+    command: mongod --port 27055
+    ports:
+      - "27055:27055"
+
+  mongo_activities:
+    container_name: mongo_activities
+    image: mongo
+    command: mongod --port 27077
+    ports:
+      - "27077:27077"
+
+  client:
+    container_name: client
+    build:
+      context: ./client
+    restart: unless-stopped
+    ports:
+      - 8080:8080
+    volumes:
+      - ./client:/usr/src/app/client
+
+  cars:
+    container_name: cars
+    build:
+      context: ./cars
+    restart: unless-stopped
+    ports:
+      - 3000:3000
+    volumes:
+      - ./cars:/usr/src/app/cars
+    depends_on:
+      - mongodb
+
+  trajects:
+    container_name: trajects
+    build:
+      context: ./trajects
+    restart: unless-stopped
+    ports:
+      - 5555:5555
+    volumes:
+      - ./trajects:/usr/src/app/trajects
+    depends_on:
+      - mongo_trajects
+
+  activities:
+    container_name: activities
+    build:
+      context: ./activities
+    restart: unless-stopped
+    ports:
+      - 7777:7777
+    volumes:
+      - ./activities:/usr/src/app/activities
+    depends_on:
+      - mongo_activities
+
+  #visits:
+  #  build:
+  #    context: ./visits
+  #  restart: unless-stopped
+  #  ports:
+  #    - 3333:3333
+  #  volumes:
+  #    - ./visits:/usr/src/app/visits
+  #  depends_on:
+  #    - mongodb
+
+  auth:
+    container_name: auth
+    build:
+      context: ./auth
+    restart: unless-stopped
+    ports:
+      - 4444:4444
+    volumes:
+      - ./auth:/usr/src/app/auth
+      - /usr/src/app/auth/node_modules
+    depends_on:
+      - mongo_auth
