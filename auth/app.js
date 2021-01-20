@@ -6,7 +6,7 @@ const app = express();
 const userRoutes = require('./routes/user');
 
 const DBNAME = "auth";
-const HOST = "mongodb:27017";
+const HOST = "mongo_auth:27044";
 const HOST_LOCAL = "localhost";
 
 mongoose.connect(`mongodb://${HOST}/${DBNAME}`,

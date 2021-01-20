@@ -4,14 +4,30 @@ services:
   mongodb:
     container_name: mongodb
     image: mongo
+    command: mongod --port 27017
     ports:
       - "27017:27017"
 
   mongo_auth:
     container_name: mongo_auth
     image: mongo
+    command: mongod --port 27044
     ports:
       - "27044:27044"
+
+  mongo_trajects:
+    container_name: mongo_trajects
+    image: mongo
+    command: mongod --port 27055
+    ports:
+      - "27055:27055"
+
+  mongo_activities:
+    container_name: mongo_activities
+    image: mongo
+    command: mongod --port 27077
+    ports:
+      - "27077:27077"
 
   client:
     container_name: client
@@ -45,7 +61,7 @@ services:
     volumes:
       - ./trajects:/usr/src/app/trajects
     depends_on:
-      - mongodb
+      - mongo_trajects
 
   activities:
     container_name: activities
@@ -57,7 +73,7 @@ services:
     volumes:
       - ./activities:/usr/src/app/activities
     depends_on:
-      - mongodb
+      - mongo_activities
 
   #visits:
   #  build:

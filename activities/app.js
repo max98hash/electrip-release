@@ -6,7 +6,7 @@ const app = express();
 const activities = require('./routes/activities');
 
 const DBNAME = "activities";
-const HOST = "mongodb:27017";
+const HOST = "mongo_activities:27077";
 const HOST_LOCAL = "localhost:27017";
 
 mongoose.connect(`mongodb://${HOST}/${DBNAME}`,

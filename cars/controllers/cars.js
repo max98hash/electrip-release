@@ -23,7 +23,7 @@ exports.createCar = (req, res, next) => {
 		.catch(error => res.status(400).json({ error }));
 }
 
-/*exports.modifyCar = (req, res, next) => {
+exports.modifyCar = (req, res, next) => {
 	Car.findByIdAndUpdate(req.params.id,
 		{ brand: req.body.brand, model: req.body.model,  years: req.body.years, matriculationNbr: req.body.matriculationNbr, 
         autonomy: req.body.autonomy}, {new: true}, 
@@ -34,7 +34,7 @@ exports.createCar = (req, res, next) => {
                 return res.status(201).json(result);
         }
     );
-};*/
+};
 
 exports.deleteCar = (req, res, next) => {
     Car.findByIdAndDelete(req.params.id, (err, result) => {

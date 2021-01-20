@@ -1,15 +1,14 @@
-# Projet Web 2020 : Electrip
+# Projet Web 2020/2021 : Electrip
 
 ## Présentation
 
-Electrip à pour objectif de pouvoir organiser des trajets ou des vacances en voiture électrique.
+Electrip à pour objectif de pouvoir organiser son emploi du temps incluant des trajets en voiture électrique.
 
 Quelques fonctionnalités :
 
 - Calcul d'arrêt en station de charge en fonction de l'autonomie
-- Recherche d'activités (restaurants, évènements, visites, etc...)
-- Sauvegarde des trajets et activités dans un calendrier
-- Visualisation des trajets et activités sur une carte
+- Sauvegarde et affichage des trajets et évènements dans un calendrier
+- Visualisation des trajets et des stations de charge associées sur une carte
 
 ## Installation
 
@@ -38,23 +37,3 @@ Pour stopper l'application :
 ```shell
 sh stop-docker.sh
 ````
-
-### En local
-
-```shell
-cd client/
-npm install
-npm run serve
-```
-
-```shell
-cd server/
-npm install
-npm run serve
-```
-
-Puis accès à l'application sur l'adresse :
-
-```http
-http://localhost:8080
-```
