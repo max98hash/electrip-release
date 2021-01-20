@@ -1,0 +1,446 @@
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: "Swagger Electrip"
+tags:
+- name: "car"
+  description: "Access to your cars"
+- name: "traject"
+  description: "Access to your trajects"
+- name: "activity"
+  description: "Aceess to your Activities"
+schemes:
+- "https"
+- "http"
+security:
+  - BasicAuth: []
+paths:
+  /car:
+    get:
+      tags:
+      - "car"
+      summary: "Get your cars"
+      description: "Get all your cars"
+      operationId: "getCars"
+      produces:
+      - "application/json"
+      responses:
+        "201":
+          description: "successful operation"
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Car'
+        "400":
+          description: "Bad request"
+  /car/create:
+    post:
+      tags:
+      - "car"
+      summary: "Create a car"
+      description: "This can only be done by the logged in user."
+      operationId: "createCars"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Create a user car"
+        required: true
+        schema:
+          $ref: "#/definitions/Car"
+      responses:
+        "201":
+          description: "Car added successfuly"
+        "400":
+          description: "Bad request"
+  /car/{idCar}:
+    get:
+      tags:
+      - "car"
+      summary: "Get car by id"
+      description: "Get a car by id"
+      operationId: "getCarById"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "idCar"
+        in: "path"
+        description: "ID of car that needs to be fetched"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+             $ref: "#/definitions/Car"
+        "400":
+          description: "Bad request"
+    put:
+      tags:
+      - "car"
+      summary: "Modify car"
+      description: "Modify the informations of car"
+      operationId: "modifyCar"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "idCar"
+        in: "path"
+        description: "ID of car that needs to be fetched"
+        required: true
+        type: "string"
+      - name: "carBody"
+        in: "body"
+        description: "Body of car that needs to be fetched"
+        schema:
+          $ref: "#/definitions/Car"
+      responses:
+        "201":
+          description: "Car updated successfuly !"
+        "400":
+          description: "Bad request"
+    delete:
+      tags:
+      - "car"
+      summary: "Delete car"
+      description: "Delete car by id"
+      operationId: "deleteCarById"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "idCar"
+        in: "path"
+        description: "ID of car that needs to be fetched"
+        required: true
+        type: "string"
+      responses:
+        "201":
+          description: "Car deleted successfuly !"
+        "400":
+          description: "Bad request !"
+  
+  /traject:
+    get:
+      tags:
+      - "traject"
+      summary: "Get your trajects"
+      description: "Get all your trajects"
+      operationId: "getTrajects"
+      produces:
+      - "application/json"
+      responses:
+        "200":
+          description: "Successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Traject"
+        "400":
+          description: "Bad request"
+  /traject/create:
+    post:
+      tags:
+      - "traject"
+      summary: "Create traject"
+      description: "Add a traject to the calender"
+      operationId: "createTraject"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Create a user car"
+        required: true
+        schema:
+          $ref: "#/definitions/Traject"
+      responses:
+        "201":
+          description: "Traject added successfuly !"
+        "400":
+          description: "Bad request"
+  /traject/{idTraject}:
+    get:
+      tags:
+      - "traject"
+      summary: "Find traject by id"
+      description: ""
+      operationId: "getTrajectById"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "idTraject"
+        in: "path"
+        description: "ID of traject that needs to be fetched"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+             $ref: "#/definitions/Traject"
+        "400":
+          description: "Traject not found"
+    put:
+      tags:
+      - "traject"
+      summary: "Update traject"
+      description: "Modify a traject"
+      operationId: "modifyTraject"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "idTraject"
+        in: "path"
+        description: "ID of traject that needs to be fetched"
+        required: true
+        type: "string"
+      - name: "TrajectBody"
+        in: "body"
+        description: "Body of traject that needs to be fetched"
+        schema:
+          $ref: "#/definitions/Traject"
+      responses:
+        "201":
+          description: " Traject updated successfuly !"
+        "400":
+          description: " Bad request"
+    delete:
+      tags:
+      - "traject"
+      summary: "Delete traject by id"
+      description: ""
+      operationId: "deleteTraject"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "idTraject"
+        in: "path"
+        description: "ID of pet that needs to be fetched"
+        required: true
+        type: "string"
+      responses:
+        "201":
+          description: "Traject delated successfuly !"
+        "400":
+          description: "Bad request"
+  /traject/car/{idCar}:
+    delete:
+      tags:
+      - "traject"
+      summary: "Delete traject linked to car"
+      description: ""
+      operationId: "deleteTrajectLinkedToCar"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "idCar"
+        in: "path"
+        description: "ID of the car where trajects containing this car need to be deleted"
+        required: true
+        type: "string"
+      responses:
+        "201":
+          description: "Trajects delated successfuly !"
+        "400":
+          description: "Bad request"
+  
+
+          
+  /activity:
+    get:
+      tags:
+      - "activity"
+      summary: "Get your activities"
+      description: "Get all your activities"
+      operationId: "getActivities"
+      produces:
+      - "application/json"
+      responses:
+        "200":
+          description: "Successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Activity"
+        "400":
+          description: "Bad request"
+  /activity/create:
+    post:
+      tags:
+      - "activity"
+      summary: "Create activity"
+      description: "add an activity to the calendar"
+      operationId: "createActivity"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Create an activity"
+        required: true
+        schema:
+          $ref: "#/definitions/Activity"
+      responses:
+        "201":
+          description: "Activity added successfuly !"
+        "400":
+          description: "Bad request"
+  /activity/{idActivity}:
+    get:
+      tags:
+      - "activity"
+      summary: "Get activity by id"
+      description: "Get an activity by id"
+      operationId: "getActivityById"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "idActivity"
+        in: "path"
+        description: "ID of activity that needs to be fetched"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "Successful operation"
+          schema:
+            $ref: "#/definitions/Activity"
+        "400":
+          description: "Bad request"
+    put:
+      tags:
+      - "activity"
+      summary: "Update an activity"
+      description: "Modify an activity"
+      operationId: "modifyActivity"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "idActivity"
+        in: "path"
+        description: "ID of activity that needs to be added"
+        required: true
+        type: "string"
+      - name: "activityBody"
+        in: "body"
+        description: "Body of activity that needs to be added"
+        schema:
+          $ref: "#/definitions/Activity"
+      responses:
+        "200":
+          description: "Activity updated successfuly !"
+        "400":
+          description: "Bad request"
+    delete:
+      tags:
+      - "activity"
+      summary: "Delete activity by id"
+      description: ""
+      operationId: "deleteActivity"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "idActivity"
+        in: "path"
+        description: "ID of activity that needs to be fetched"
+        required: true
+        type: "string"
+      responses:
+        "201":
+          description: "Activity deleted successfuly !"
+        "400":
+          description: "Bad request"
+          
+securityDefinitions:
+  BasicAuth:
+    type: basic
+definitions:
+  
+  Car:
+    type: "object"
+    properties:
+      _id:
+        type: "string"
+      brand: 
+        type: "string"
+      model:
+        type: "string"
+      years:
+        type: "integer"
+        format: "int64"
+      matriculationNbr:
+        type: "string"
+      autonomy:
+        type: "integer"
+        format: "int64"
+      userId:
+        type: "string"
+        
+  Traject:
+    type: "object"
+    properties:
+      _id:
+        type: "string"
+      name:
+        type: "string"
+      startCoord:
+        type: "array"
+        items:
+          type: "integer"
+      startName:
+        type: "string"
+      endCoord:
+        type: "array"
+        items:
+          type: "integer"
+      endName:
+        type: "string"
+      userId:
+        type: "string"
+      distance:
+        type: "number"
+      date:
+        type: "string"
+        format: "date"
+      carId:
+        type: "string"
+      carName:
+        type: "string"
+      stations:
+        type: "array"
+        items:
+          type: "object"
+      chargingNecessary:
+          type : "boolean"
+  Activity:
+    type: "object"
+    properties:
+      _id:
+        type: "string"
+      name:
+        type: "string"
+      description:
+        type: "string"
+      start:
+        type: "string"
+        format: "date"
+      end:
+        type: "string"
+        format: "date"
+      category:
+        type: "string"
+      userId:
+        type: "string"
+  ApiResponse:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      type:
+        type: "string"
+      message:
+        type: "string"
